@@ -1,0 +1,260 @@
+.page {
+  min-height: 100vh;
+  background: var(--bg-light);
+}
+
+.internships-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.page-header h2 {
+  font-size: 32px;
+  color: var(--text-dark);
+  margin: 0;
+}
+
+.btn-back {
+  background: var(--text-light);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  transition: var(--transition);
+  border: none;
+  cursor: pointer;
+}
+
+.btn-back:hover {
+  background: var(--text-dark);
+  transform: translateX(-3px);
+}
+
+.empty-state {
+  background: white;
+  padding: 60px 40px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+}
+
+.empty-state p {
+  color: var(--text-light);
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.internships-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+.internship-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.internship-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-8px);
+}
+
+.card-header {
+  padding: 20px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-size: 20px;
+  flex: 1;
+}
+
+.slots-badge {
+  background: rgba(255, 255, 255, 0.3);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.slots-badge.available {
+  background: rgba(16, 185, 129, 0.3);
+  color: white;
+}
+
+.slots-badge.full {
+  background: rgba(239, 68, 68, 0.3);
+  color: white;
+}
+
+.card-content {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.info-row .label {
+  font-weight: 600;
+  color: var(--text-dark);
+  min-width: 100px;
+}
+
+.info-row .value {
+  color: var(--text-light);
+  text-align: right;
+}
+
+.info-row .value.stipend {
+  color: var(--success-color);
+  font-weight: 600;
+}
+
+.card-footer {
+  padding: 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  gap: 10px;
+}
+
+.btn-apply {
+  flex: 1;
+  background: var(--success-color);
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 14px;
+}
+
+.btn-apply:hover:not(:disabled) {
+  background: #059669;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-apply:disabled {
+  background: var(--border-color);
+  color: var(--text-light);
+  cursor: not-allowed;
+}
+
+.btn-applied {
+  flex: 1;
+  background: var(--border-color);
+  color: var(--text-light);
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: not-allowed;
+  font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .internships-container {
+    padding: 25px 15px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-header h2 {
+    font-size: 24px;
+  }
+
+  .internships-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .internships-container {
+    padding: 20px 10px;
+  }
+
+  .page-header h2 {
+    font-size: 20px;
+  }
+
+  .internships-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .card-header {
+    flex-direction: column;
+  }
+
+  .info-row {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .info-row .value {
+    text-align: left;
+  }
+}
+
+/* ── One-application rule banner ── */
+.applied-banner {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+  border-left: 5px solid #10b981;
+  padding: 14px 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  font-weight: 500;
+  font-size: 15px;
+}
+
+/* ── Submitted button (green, this internship) ── */
+.btn-submitted {
+  flex: 1;
+  background: #10b981;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: not-allowed;
+  font-size: 14px;
+  opacity: 0.9;
+}

@@ -1,0 +1,144 @@
+.dashboard-page {
+  min-height: 100vh;
+  background: var(--bg-light);
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.dashboard-card {
+  background: white;
+  padding: 50px 40px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  width: 100%;
+  max-width: 600px;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.dashboard-card h2 {
+  font-size: 32px;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.dashboard-subtitle {
+  text-align: center;
+  color: var(--text-light);
+  margin-bottom: 40px;
+  font-size: 16px;
+}
+
+.dashboard-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.dashboard-btn {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px 24px;
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+  min-height: 60px;
+}
+
+.dashboard-btn:hover:not(:disabled) {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px);
+}
+
+.dashboard-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-icon {
+  font-size: 24px;
+  min-width: 30px;
+}
+
+.coming-soon {
+  text-align: center;
+  color: var(--text-light);
+  margin-top: 30px;
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 30px 15px;
+  }
+
+  .dashboard-card {
+    padding: 35px 25px;
+  }
+
+  .dashboard-card h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  .dashboard-btn {
+    padding: 16px 20px;
+    font-size: 15px;
+    min-height: 55px;
+  }
+
+  .btn-icon {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 20px 10px;
+  }
+
+  .dashboard-card {
+    padding: 25px 20px;
+  }
+
+  .dashboard-card h2 {
+    font-size: 20px;
+  }
+
+  .dashboard-subtitle {
+    margin-bottom: 25px;
+    font-size: 14px;
+  }
+
+  .dashboard-btn {
+    padding: 14px 16px;
+    gap: 12px;
+    min-height: 50px;
+  }
+}

@@ -1,0 +1,247 @@
+.add-internship-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.add-form-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 30px;
+}
+
+.add-form-card h3 {
+  font-size: 20px;
+  margin-bottom: 25px;
+  color: var(--text-dark);
+}
+
+.internship-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-row.single {
+  grid-template-columns: 1fr;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--text-dark);
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 14px;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  font-size: 15px;
+  font-family: inherit;
+  transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+  outline: none;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.btn-add {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  color: white;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 16px;
+  transition: var(--transition);
+  margin-top: 20px;
+}
+
+.btn-add:hover:not(:disabled) {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.btn-add:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Internships List */
+.internships-list-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: var(--shadow-md);
+}
+
+.internships-list-card h3 {
+  font-size: 20px;
+  margin-bottom: 25px;
+  color: var(--text-dark);
+}
+
+.internships-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.list-item {
+  background: var(--bg-light);
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 4px solid var(--primary-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+  transition: var(--transition);
+}
+
+.list-item:hover {
+  background: #e8f4fd;
+  box-shadow: var(--shadow-md);
+}
+
+.item-header {
+  flex: 1;
+}
+
+.item-header h4 {
+  margin: 0 0 5px 0;
+  color: var(--text-dark);
+  font-size: 16px;
+}
+
+.item-role {
+  background: var(--primary-color);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.item-details {
+  display: flex;
+  gap: 20px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  color: var(--text-light);
+}
+
+.btn-delete {
+  background: var(--danger-color);
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.btn-delete:hover {
+  background: #dc2626;
+  box-shadow: var(--shadow-md);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .add-internship-container {
+    padding: 25px 15px;
+  }
+
+  .add-form-card,
+  .internships-list-card {
+    padding: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+
+  .list-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .item-details {
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  .btn-delete {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .add-internship-container {
+    padding: 20px 10px;
+  }
+
+  .add-form-card h3,
+  .internships-list-card h3 {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  .form-row {
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .btn-add {
+    padding: 12px 20px;
+    font-size: 15px;
+  }
+
+  .item-details {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

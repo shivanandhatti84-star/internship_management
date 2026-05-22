@@ -1,0 +1,146 @@
+.status-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.applications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.application-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: var(--transition);
+}
+
+.application-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateX(5px);
+}
+
+.app-header {
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.app-header h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.status-badge {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.status-accepted {
+  background: rgba(16, 185, 129, 0.3);
+  color: white;
+}
+
+.status-rejected {
+  background: rgba(239, 68, 68, 0.3);
+  color: white;
+}
+
+.status-pending {
+  background: rgba(245, 158, 11, 0.3);
+  color: white;
+}
+
+.app-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.info-row .label {
+  font-weight: 600;
+  color: var(--text-dark);
+  min-width: 120px;
+}
+
+.info-row .value {
+  color: var(--text-light);
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 15px;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+  box-shadow: var(--shadow-md);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .status-container {
+    padding: 25px 15px;
+  }
+
+  .app-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .info-row .label {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .status-container {
+    padding: 20px 10px;
+  }
+
+  .app-header h3 {
+    font-size: 18px;
+  }
+
+  .status-badge {
+    font-size: 12px;
+  }
+
+  .app-content {
+    padding: 15px;
+  }
+}
