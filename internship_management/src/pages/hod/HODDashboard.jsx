@@ -14,9 +14,6 @@ function HODDashboard({ onLogout, user }) {
           <h2>HOD Dashboard</h2>
           <p className="dashboard-subtitle">Welcome, {user?.usn}!</p>
           <div className="dashboard-buttons">
-            <button className="dashboard-btn" onClick={() => navigate('/hod/accepted-students')}>
-              <span className="btn-icon">🎓</span> Accepted Students & Assign Mentor
-            </button>
             <button className="dashboard-btn" onClick={() => navigate('/hod/mentor-details')}>
               <span className="btn-icon">👨‍🏫</span> Mentor Details
             </button>

@@ -102,7 +102,6 @@ router.post("/apply", async (req, res) => {
       usn,
       internshipId,
       company: internship.company,
-      role: internship.role,
       status: "Pending",
     });
 

@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const internshipSchema = new mongoose.Schema({
   company: { type: String, required: true },
-  role: { type: String, required: true },
   location: { type: String, required: true },
   duration: { type: String, required: true },
   startDate: { type: String, required: true },

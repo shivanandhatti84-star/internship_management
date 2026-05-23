@@ -91,7 +91,7 @@ function ApplicationStatus({ user }) {
            <div key={app._id} className="application-card">
     
           <div className="app-header">
-      <h3>{app.internshipRole}</h3>
+      <h3>{app.company || app.internshipId?.company || 'Application'}</h3>
 
       <span className={`status-badge ${getStatusColor(app.status)}`}>
         {getStatusIcon(app.status)} {app.status}
@@ -101,11 +101,6 @@ function ApplicationStatus({ user }) {
     <div className="app-content">
 
       <div className="info-row">
-        <span className="label">Role:</span>
-        <span className="value">{app.internshipRole}</span>
-      </div>
-
-      <div className="info-row">
         <span className="label">USN:</span>
         <span className="value">{app.usn}</span>
       </div>
@@ -113,7 +108,7 @@ function ApplicationStatus({ user }) {
       <div className="info-row">
         <span className="label">Applied Date:</span>
         <span className="value">
-          {new Date(app.createdAt).toLocaleDateString()}
+          {app.appliedDate ? new Date(app.appliedDate).toLocaleDateString() : 'Not available'}
         </span>
       </div>
 

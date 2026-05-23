@@ -64,7 +64,7 @@ function ViewInternships({ user }) {
     }
 
     const confirmed = window.confirm(
-      `Are you sure you want to apply to ${internship.company} for the role of ${internship.role}?\n\nOnly ONE application allowed.`
+      `Are you sure you want to apply to ${internship.company}?\n\nOnly ONE application allowed.`
     );
 
     if (!confirmed) return;
@@ -78,7 +78,6 @@ function ViewInternships({ user }) {
         body: JSON.stringify({
           usn: user?.usn,
           company: internship.company,
-          role: internship.role,
           internshipId: internship._id,
         }),
       });
@@ -148,11 +147,6 @@ function ViewInternships({ user }) {
                   </div>
 
                   <div className="card-content">
-                    <div className="info-row">
-                      <span className="label">Role:</span>
-                      <span className="value">{internship.role}</span>
-                    </div>
-
                     <div className="info-row">
                       <span className="label">Location:</span>
                       <span className="value">{internship.location}</span>

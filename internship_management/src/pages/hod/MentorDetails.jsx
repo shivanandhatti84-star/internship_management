@@ -56,13 +56,19 @@ function MentorDetails() {
                       <p className="no-students-text">No students assigned yet.</p>
                     ) : (
                       <table className="students-mini-table">
-                        <thead><tr><th>USN</th><th>Company</th><th>Role</th></tr></thead>
+                        <thead>
+                          <tr>
+                            <th>Serial No.</th>
+                            <th>USN</th>
+                            <th>Company</th>
+                          </tr>
+                        </thead>
                         <tbody>
-                          {students.map(s => (
+                          {students.map((s, index) => (
                             <tr key={s._id}>
-                              <td>{s.usn}</td>
-                              <td>{s.company || s.internshipId?.company}</td>
-                              <td>{s.role || s.internshipId?.role || '—'}</td>
+                              <td>{index + 1}</td>
+                              <td>{s.usn || '—'}</td>
+                              <td>{s.company || s.internshipId?.company || '—'}</td>
                             </tr>
                           ))}
                         </tbody>

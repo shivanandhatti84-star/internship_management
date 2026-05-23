@@ -362,10 +362,14 @@ function MonitorApplications({ user }) {
   const statusClass = (s) =>
     s === 'Accepted' ? 'badge-accepted' : s === 'Rejected' ? 'badge-rejected' : 'badge-pending';
 
-  const formatDate = (iso) =>
-    new Date(iso).toLocaleDateString('en-IN', {
-      day: '2-digit', month: 'short', year: 'numeric',
-    });
+  const formatDate = (iso) => {
+    const date = new Date(iso);
+    return Number.isNaN(date.getTime())
+      ? 'Not available'
+      : date.toLocaleDateString('en-IN', {
+          day: '2-digit', month: 'short', year: 'numeric',
+        });
+  };
 
   const branchFull = (b) =>
     ({ CSE: 'Computer Science Engg.', ECE: 'Electronics & Comm.', ME: 'Mechanical Engg.', CE: 'Civil Engg.' }[b] || b);
@@ -438,7 +442,6 @@ function MonitorApplications({ user }) {
                   <tr>
                     <th>USN</th>
                     <th>Company</th>
-                    <th>Role</th>
                     <th>Applied Date</th>
                     <th>Status / Action</th>
                     <th>Profile</th>
@@ -453,8 +456,7 @@ function MonitorApplications({ user }) {
                     >
                       <td className="td-usn">{app.usn}</td>
                       <td>{app.company}</td>
-                      <td>{app.role}</td>
-                      <td>{formatDate(app.createdAt)}</td>
+                      <td>{formatDate(app.appliedDate)}</td>
                       <td>
                         {app.status !== 'Pending' ? (
                           <span className={`status-badge ${statusClass(app.status)}`}>
@@ -550,7 +552,7 @@ function MonitorApplications({ user }) {
 <div className="drawer-fields">
   <div className="drawer-field-row">
     <span className="df-label">Applied On</span>
-    <span className="df-value">{formatDate(selectedApp.createdAt)}</span>
+    <span className="df-value">{formatDate(selectedApp.appliedDate)}</span>
   </div>
   <div className="drawer-field-row">
     <span className="df-label">Status</span>

@@ -109,9 +109,9 @@ import MonitorApplications from './pages/coordinator/MonitorApplications';
 import MentorDashboard from './pages/mentor/MentorDashboard';
 import HODDashboard from './pages/hod/HODDashboard';
 import ProfileSetupGuard from './pages/student/ProfileSetupGuard';
-import AcceptedStudents from './pages/hod/AcceptedStudents';
 import DepartmentStats from './pages/hod/DepartmentStats';
 import MentorDetails from './pages/hod/MentorDetails';
+import AssignMentor from './pages/coordinator/AssignMentor';
 import EvaluationReports from './pages/mentor/EvaluationReports';
 import StudentCommunication from './pages/mentor/StudentCommunication';
 import StudentProgress from './pages/mentor/StudentProgress';
@@ -185,6 +185,7 @@ function App() {
             <Route path="/coordinator/dashboard" element={<CoordinatorDashboard onLogout={handleLogout} user={userData} />} />
             <Route path="/coordinator/add-internship" element={<AddInternship user={userData} />} />
             <Route path="/coordinator/monitor" element={<MonitorApplications user={userData} />} />
+            <Route path="/coordinator/assign-mentor" element={<AssignMentor />} />
           </>
         ) : null}
 
@@ -231,13 +232,6 @@ function App() {
         />
       }
     />
-
-   
-      <Route
-      path="/hod/accepted-students"
-      element={<AcceptedStudents />}
-    />
-    
 
     <Route
       path="/hod/mentor-details"
