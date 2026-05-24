@@ -60,9 +60,6 @@ function MentorDashboard({ onLogout, user }) {
             <button className="dashboard-btn" onClick={() => navigate('/mentor/evaluation')}>
               <span className="btn-icon">📝</span> Evaluation Reports
             </button>
-            <button className="dashboard-btn" onClick={() => navigate('/mentor/communication')}>
-              <span className="btn-icon">💬</span> Student Communication
-            </button>
             <button className="dashboard-btn" onClick={() => navigate('/mentor/progress')}>
               <span className="btn-icon">📈</span> Evalution Scheduling
             </button>

@@ -103,6 +103,7 @@ import StudentDashboard from './pages/student/StudentDashboard';
 import ViewInternships from './pages/student/ViewInternships';
 import ApplicationStatus from './pages/student/ApplicationStatus';
 import StudentProfile from './pages/student/StudentProfile';
+import StudentEvaluationResults from './pages/student/StudentEvaluationResults';
 import CoordinatorDashboard from './pages/coordinator/CoordinatorDashboard';
 import AddInternship from './pages/coordinator/AddInternship';
 import MonitorApplications from './pages/coordinator/MonitorApplications';
@@ -113,7 +114,6 @@ import DepartmentStats from './pages/hod/DepartmentStats';
 import MentorDetails from './pages/hod/MentorDetails';
 import AssignMentor from './pages/coordinator/AssignMentor';
 import EvaluationReports from './pages/mentor/EvaluationReports';
-import StudentCommunication from './pages/mentor/StudentCommunication';
 import StudentProgress from './pages/mentor/StudentProgress';
 import StudentProfiles from './pages/mentor/StudentProfiles';
 
@@ -176,6 +176,7 @@ function App() {
             } />
             {/* Profile page does NOT need the guard — student is editing here */}
             <Route path="/student/profile" element={<StudentProfile user={userData} />} />
+            <Route path="/student/evaluation-results" element={<StudentEvaluationResults user={userData} />} />
           </>
         ) : null}
 
@@ -200,11 +201,6 @@ function App() {
     <Route
       path="/mentor/evaluation"
       element={<EvaluationReports user={userData} />}
-    />
-
-    <Route
-      path="/mentor/communication"
-      element={<StudentCommunication user={userData} />}
     />
 
     <Route

@@ -201,10 +201,11 @@
 
 
 
-
+require('dotenv').config();
 
 const express = require("express");
 const cors = require("cors");
+const path = require('path');
 
 const connectDB = require("./config/db");
 
@@ -222,6 +223,10 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Serve uploaded files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ================= ROUTES =================
 
@@ -233,6 +238,16 @@ app.use("/applications", require("./routes/application"));
 
 app.use("/profile", profileRoutes);
 app.use("/mentor", require("./routes/mentor"));
+
+// ================= ERROR HANDLING =================
+
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+    console.error('Invalid JSON payload received:', err.message);
+    return res.status(400).json({ error: 'Invalid JSON payload' });
+  }
+  next(err);
+});
 
 // =============================================
 // SAVE EVALUATION

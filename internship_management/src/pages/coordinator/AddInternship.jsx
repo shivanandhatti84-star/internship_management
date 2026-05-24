@@ -7,7 +7,6 @@ function AddInternship({ user }) {
   const [internships, setInternships] = useState([]);
   const [formData, setFormData] = useState({
     company: '',
-   // role: '',
     location: '',
     duration: '',
     startDate: '',
@@ -52,7 +51,6 @@ function AddInternship({ user }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           company: formData.company,
-            //role: formData.role,
           location: formData.location,
           duration: formData.duration,
           startDate: formData.startDate,
@@ -69,7 +67,6 @@ function AddInternship({ user }) {
       // Reset form
       setFormData({
         company: '',
-        //role: '',
         location: '',
         duration: '',
         startDate: '',
@@ -137,20 +134,6 @@ function AddInternship({ user }) {
               </div>
 
               <div className="form-group">
-                <label>Location *</label>
-                <input
-                  type="text"
-                  name="location"
-                  placeholder="Enter location"
-                  value={formData.location}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="form-row">
-              <div className="form-group">
                 <label>Duration *</label>
                 <input
                   type="text"
@@ -172,9 +155,7 @@ function AddInternship({ user }) {
                   required
                 />
               </div>
-            </div>
 
-            <div className="form-row">
               <div className="form-group">
                 <label>Stipend (₹) *</label>
                 <input
@@ -227,7 +208,6 @@ function AddInternship({ user }) {
                 <div key={internship._id} className="list-item">
                   <div className="item-header">
                     <h4>{internship.company}</h4>
-                    {/* <span className="item-role">{internship.role}</span> */}
                   </div>
 
                   <div className="item-details">

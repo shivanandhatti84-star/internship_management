@@ -546,6 +546,35 @@ function MonitorApplications({ user }) {
                   </div>
                 </div>
 
+                {/* Resume */}
+                <div className="drawer-section-label">Resume</div>
+                <div className="drawer-fields">
+                  {studentProfile.resume && studentProfile.resume.path ? (
+                    <div className="drawer-resume">
+                      <a
+                        href={`http://localhost:5000${studentProfile.resume.path}`}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Open Resume
+                      </a>
+
+                      {studentProfile.resume.contentType && studentProfile.resume.contentType.includes('pdf') && (
+                        <div className="resume-preview">
+                          <iframe
+                            src={`http://localhost:5000${studentProfile.resume.path}`}
+                            title="Resume Preview"
+                            width="100%"
+                            height="300px"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="drawer-fields"><em>No resume uploaded by student.</em></div>
+                  )}
+                </div>
+
                 {/* Application details */}
                 
 <div className="drawer-section-label">Application Details</div>

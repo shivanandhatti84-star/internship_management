@@ -74,14 +74,13 @@ function AssignMentor() {
           <div className="hod-table-card">
             <table className="hod-table">
               <thead>
-                <tr><th>USN</th><th>Company</th><th>Role</th><th>Applied Date</th><th>Assign Mentor</th><th>Status</th><th>Action</th></tr>
+                <tr><th>USN</th><th>Company</th><th>Applied Date</th><th>Assign Mentor</th><th>Status</th><th>Action</th></tr>
               </thead>
               <tbody>
                 {acceptedApps.map(app => (
                   <tr key={app._id}>
                     <td><strong>{app.usn}</strong></td>
                     <td>{app.company || app.internshipId?.company}</td>
-                    <td>{app.role || app.internshipId?.role || '—'}</td>
                     <td>{formatDate(app.appliedDate)}</td>
                     <td>
                       {mentors.length === 0 ? (
