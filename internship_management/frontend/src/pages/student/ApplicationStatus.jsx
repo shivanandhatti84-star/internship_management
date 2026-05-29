@@ -15,7 +15,7 @@ function ApplicationStatus({ user }) {
   // ================= LOAD FROM DATABASE =================
   const loadApplications = async () => {
     try {
-      const res = await fetch('http://localhost:5000/applications');
+      const res = await fetch('https://internship-management-uhf3.onrender.com/applications');
       const data = await res.json();
 
       const userApps = data.filter(app => app.usn === user?.usn);
