@@ -30,7 +30,7 @@ function StudentProgress({ user }) {
       return;
     }
     try {
-      const res = await fetch('http://localhost:5000/mentor/evaluation/schedule', {
+      const res = await fetch('https://internship-management-uhf3.onrender.com/mentor/evaluation/schedule', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -67,7 +67,7 @@ function StudentProgress({ user }) {
     try {
 
       const res = await fetch(
-        'http://localhost:5000/applications'
+        'https://internship-management-uhf3.onrender.com/applications'
       );
 
       const data = await res.json();
@@ -106,7 +106,7 @@ function StudentProgress({ user }) {
 
       const res = await fetch(
 
-        `http://localhost:5000/mentor/evaluation/${usn}`
+        `https://internship-management-uhf3.onrender.com/mentor/evaluation/${usn}`
 
       );
 
