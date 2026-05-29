@@ -281,7 +281,7 @@ function MonitorApplications({ user }) {
 
   const loadApplications = async () => {
     try {
-      const res  = await fetch('http://localhost:5000/applications');
+      const res  = await fetch('https://internship-management-uhf3.onrender.com/applications');
       const data = await res.json();
       setApplications(data);
     } catch (err) {
@@ -294,7 +294,7 @@ function MonitorApplications({ user }) {
     setProfileLoading(true);
     setStudentProfile(null);
     try {
-      const res  = await fetch(`http://localhost:5000/profile/${usn}`);
+      const res  = await fetch(`https://internship-management-uhf3.onrender.com/profile/${usn}`);
       const data = await res.json();
       setStudentProfile(data);
     } catch (err) {
@@ -329,7 +329,7 @@ function MonitorApplications({ user }) {
     )) return;
 
     try {
-      const res = await fetch(`http://localhost:5000/applications/${appId}`, {
+      const res = await fetch(`https://internship-management-uhf3.onrender.com/applications/${appId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
@@ -348,7 +348,7 @@ function MonitorApplications({ user }) {
   const handleDeleteApplication = async (appId) => {
     if (!window.confirm('Are you sure you want to delete this application?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/applications/${appId}`, { method: 'DELETE' });
+      const res = await fetch(`https://internship-management-uhf3.onrender.com/applications/${appId}`, { method: 'DELETE' });
       const msg = await res.text();
       alert(msg);
       loadApplications();
@@ -552,7 +552,7 @@ function MonitorApplications({ user }) {
                   {studentProfile.resume && studentProfile.resume.path ? (
                     <div className="drawer-resume">
                       <a
-                        href={`http://localhost:5000${studentProfile.resume.path}`}
+                        href={`https://internship-management-uhf3.onrender.com${studentProfile.resume.path}`}
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -562,7 +562,7 @@ function MonitorApplications({ user }) {
                       {studentProfile.resume.contentType && studentProfile.resume.contentType.includes('pdf') && (
                         <div className="resume-preview">
                           <iframe
-                            src={`http://localhost:5000${studentProfile.resume.path}`}
+                            src={`https://internship-management-uhf3.onrender.com${studentProfile.resume.path}`}
                             title="Resume Preview"
                             width="100%"
                             height="300px"
