@@ -134,7 +134,7 @@ function Login({ onLogin }) {
     if (!role) { setError('Please select a role'); setLoading(false); return; }
 
     try {
-      const res  = await fetch('http://localhost:5000/auth/login', {
+      const res  = await fetch('https://internship-management-uhf3.onrender.com/auth/login', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ usn, role, password }),
