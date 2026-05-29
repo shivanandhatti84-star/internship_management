@@ -355,7 +355,7 @@ function StudentProfile({ user }) {
 
   const loadProfile = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/profile/${user.usn}`);
+      const res = await fetch(`https://internship-management-uhf3.onrender.com/profile/${user.usn}`);
       const data = await res.json();
       const userProfile = data || {
         usn: user?.usn,
@@ -389,7 +389,7 @@ function StudentProfile({ user }) {
 
   const handleSave = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/profile/save`, {
+      const res = await fetch(`https://internship-management-uhf3.onrender.com/profile/save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -419,7 +419,7 @@ function StudentProfile({ user }) {
       fd.append('resume', resumeFile);
       fd.append('usn', profile.usn);
 
-      const res = await fetch('http://localhost:5000/profile/upload', {
+      const res = await fetch('https://internship-management-uhf3.onrender.com/profile/upload', {
         method: 'POST',
         body: fd,
       });
