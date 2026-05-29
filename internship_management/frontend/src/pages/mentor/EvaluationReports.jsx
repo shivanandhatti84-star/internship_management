@@ -52,7 +52,7 @@ function EvaluationReports({ user }) {
 
     try {
 
-      const res = await fetch(`http://localhost:5000/applications`);
+      const res = await fetch(`https://internship-management-uhf3.onrender.com/applications`);
       const data = await res.json();
 
       const assigned = data.filter(
@@ -113,7 +113,7 @@ function EvaluationReports({ user }) {
     try {
 
       const res = await fetch(
-        `http://localhost:5000/mentor/evaluation/save`,
+        `https://internship-management-uhf3.onrender.com/mentor/evaluation/save`,
         {
           method: 'POST',
           headers: {
