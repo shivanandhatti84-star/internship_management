@@ -82,7 +82,7 @@
 
 const express = require("express");
 const router = express.Router();
-const Application = require("../models/Application");
+const Application = require("../models/application");
 const Internship = require("../models/Internship");
 
 // APPLY — one application per student enforced at DB level
