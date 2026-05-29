@@ -15,7 +15,7 @@ function AcceptedStudents() {
 
   const fetchAccepted = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/applications`);
+      const res = await fetch(`https://internship-management-uhf3.onrender.com/applications`);
       const data = await res.json();
       const accepted = data.filter(a => a.status === 'Accepted');
       setAcceptedApps(accepted);
@@ -27,7 +27,7 @@ function AcceptedStudents() {
 
   const fetchMentors = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/auth/mentors`);
+      const res = await fetch(`https://internship-management-uhf3.onrender.com/auth/mentors`);
       const data = await res.json();
       setMentors(data);
     } catch { alert('Could not load mentors.'); }
@@ -44,7 +44,7 @@ function AcceptedStudents() {
 
     setSaving(app._id);
     try {
-      const res = await fetch(`http://localhost:5000/applications/${app._id}/assign-mentor`, {
+      const res = await fetch(`https://internship-management-uhf3.onrender.com/applications/${app._id}/assign-mentor`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mentorUsn }),
