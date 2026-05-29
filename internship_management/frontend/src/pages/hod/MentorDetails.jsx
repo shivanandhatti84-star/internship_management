@@ -12,13 +12,13 @@ function MentorDetails() {
   useEffect(() => { fetchMentors(); fetchAccepted(); }, []);
 
   const fetchMentors = async () => {
-    try { const res = await fetch(`http://localhost:5000/auth/mentors`); setMentors(await res.json()); }
+    try { const res = await fetch(`https://internship-management-uhf3.onrender.com/auth/mentors`); setMentors(await res.json()); }
     catch { alert('Could not load mentors.'); }
   };
 
   const fetchAccepted = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/applications`);
+      const res = await fetch(`https://internship-management-uhf3.onrender.com/applications`);
       const data = await res.json();
       setAcceptedApps(data.filter(a => a.status === 'Accepted'));
     } catch { alert('Could not load applications.'); }
