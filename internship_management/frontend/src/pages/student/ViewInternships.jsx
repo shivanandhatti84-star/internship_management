@@ -17,7 +17,7 @@ function ViewInternships({ user }) {
   // ================= LOAD INTERNSHIPS =================
   const loadInternships = async () => {
     try {
-      const res = await fetch('http://localhost:5000/internships');
+      const res = await fetch('https://internship-management-uhf3.onrender.com/internships');
       const data = await res.json();
       setInternships(data);
     } catch (error) {
@@ -29,7 +29,7 @@ function ViewInternships({ user }) {
   // ================= LOAD APPLICATIONS =================
   const loadApplications = async () => {
     try {
-      const res = await fetch('http://localhost:5000/applications');
+      const res = await fetch('https://internship-management-uhf3.onrender.com/applications');
       const data = await res.json();
       setApplications(data);
     } catch (error) {
@@ -72,7 +72,7 @@ function ViewInternships({ user }) {
     setLoading(true);
 
     try {
-      const res = await fetch('http://localhost:5000/applications/apply', {
+      const res = await fetch('https://internship-management-uhf3.onrender.com/applications/apply', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
