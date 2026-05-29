@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const connectDB = async () => {
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/internship_portal");
+    await mongoose.connect("mongodb+srv://shivanandhatti84_db_user:shiva.444@internship.rhrqtlf.mongodb.net/?appName=internship");
     console.log("Local MongoDB Connected ✅");
     try {
       await mongoose.connection.db.collection("evaluations").dropIndex("usn_1");
