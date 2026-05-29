@@ -13,9 +13,9 @@ function DepartmentStats() {
   const fetchStats = async () => {
     try {
       const [appsRes, internRes, mentorsRes] = await Promise.all([
-        fetch(`http://localhost:5000/applications`),
-        fetch(`http://localhost:5000/internships`),
-        fetch(`http://localhost:5000/auth/mentors`),
+        fetch(`https://internship-management-uhf3.onrender.com/applications`),
+        fetch(`https://internship-management-uhf3.onrender.com/internships`),
+        fetch(`https://internship-management-uhf3.onrender.com/auth/mentors`),
       ]);
       const apps        = await appsRes.json();
       const internships = await internRes.json();
