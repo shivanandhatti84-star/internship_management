@@ -1,4 +1,11 @@
 {
+  "name": "internship_management_backend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "build": "cd ../frontend && npm install && npm run build"
+  },
   "dependencies": {
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
