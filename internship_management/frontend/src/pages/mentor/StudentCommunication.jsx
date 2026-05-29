@@ -20,7 +20,7 @@ function StudentCommunication({ user }) {
 
   const fetchMyStudents = async () => {
     try {
-      const res = await fetch(`http://localhost:5000/applications`);
+      const res = await fetch(`https://internship-management-uhf3.onrender.com/applications`);
       const data = await res.json();
       setStudents(data.filter(a => a.status === 'Accepted' && a.mentorUsn === user?.usn));
     } catch { alert('Could not load students.'); }
@@ -28,7 +28,7 @@ function StudentCommunication({ user }) {
 
   const fetchMessages = async (usn) => {
     try {
-      const res = await fetch(`http://localhost:5000/mentor/messages/${usn}`);
+      const res = await fetch(`https://internship-management-uhf3.onrender.com/mentor/messages/${usn}`);
       const data = await res.json();
       setMessages(data);
     } catch { setMessages([]); }
@@ -38,7 +38,7 @@ function StudentCommunication({ user }) {
     if (!newMessage.trim() || !selectedStudent) return;
     setSending(true);
     try {
-      const res = await fetch(`http://localhost:5000/mentor/messages/send`, {
+      const res = await fetch(`https://internship-management-uhf3.onrender.com/mentor/messages/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
