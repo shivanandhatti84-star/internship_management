@@ -26,7 +26,7 @@ function StudentProfiles({ user }) {
 
     try {
 
-      const appsRes = await fetch('http://localhost:5000/applications');
+      const appsRes = await fetch('https://internship-management-uhf3.onrender.com/applications');
       const appsData = await appsRes.json();
 
       console.log("Applications:", appsData);
@@ -67,7 +67,7 @@ function StudentProfiles({ user }) {
 
       console.log("Fetching profile for:", usn);
 
-      const res = await fetch(`http://localhost:5000/profile/${usn}`);
+      const res = await fetch(`https://internship-management-uhf3.onrender.com/profile/${usn}`);
 
       const data = await res.json();
 
