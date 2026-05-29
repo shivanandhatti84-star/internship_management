@@ -24,7 +24,7 @@ function AddInternship({ user }) {
   // ================= LOAD FROM DATABASE =================
   const loadInternships = async () => {
     try {
-      const res = await fetch('http://localhost:5000/internships');
+      const res = await fetch('https://internship-management-uhf3.onrender.com/internships');
       const data = await res.json();
       setInternships(data);
     } catch (error) {
@@ -46,7 +46,7 @@ function AddInternship({ user }) {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5000/internships/add', {
+      const res = await fetch('https://internship-management-uhf3.onrender.com/internships/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -88,7 +88,7 @@ function AddInternship({ user }) {
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this internship?')) {
       try {
-        await fetch(`http://localhost:5000/internships/${id}`, {
+        await fetch(`https://internship-management-uhf3.onrender.com/internships/${id}`, {
           method: 'DELETE',
         });
 
