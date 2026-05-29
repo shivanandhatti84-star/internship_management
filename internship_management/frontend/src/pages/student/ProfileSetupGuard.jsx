@@ -40,7 +40,7 @@ function ProfileSetupGuard({ user, children }) {
   const checkProfile = async () => {
     if (!user?.usn) { setChecking(false); return; }
     try {
-      const res  = await fetch(`http://localhost:5000/profile/${user.usn}`);
+      const res  = await fetch(`https://internship-management-uhf3.onrender.com/profile/${user.usn}`);
       const data = await res.json();
       setProfile(data);
       // Pre-fill form with whatever exists
@@ -86,7 +86,7 @@ function ProfileSetupGuard({ user, children }) {
 
     setSaving(true);
     try {
-      const res = await fetch('http://localhost:5000/profile/save', {
+      const res = await fetch('https://internship-management-uhf3.onrender.com/profile/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, usn: user?.usn }),
