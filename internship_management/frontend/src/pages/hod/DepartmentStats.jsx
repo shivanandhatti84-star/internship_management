@@ -66,7 +66,7 @@ function DepartmentStats() {
             <div className="dept-stats-section">
               <h3 className="section-title">Internship & Mentor Overview</h3>
               <div className="dept-stats-grid">
-                <Card label="Selected Students"       value={stats.totalInternships}   color="blue" />
+                <Card label="Total Internships"       value={stats.totalInternships}   color="blue" />
                 <Card label="Mentors Registered"       value={stats.totalMentors}       color="purple" />
                 <Card label=" Mentor Assigned Students" value={stats.assignedStudents}   color="green" />
                 <Card label="Students Without Mentor"  value={stats.unassignedStudents} color="yellow" />
