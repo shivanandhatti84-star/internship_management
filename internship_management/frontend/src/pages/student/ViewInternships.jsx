@@ -7,6 +7,7 @@ function ViewInternships({ user }) {
   const [internships, setInternships] = useState([]);
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -97,7 +98,12 @@ function ViewInternships({ user }) {
   };
 
   const alreadyApplied = hasAppliedAnywhere();
-
+  const filteredInternships = internships.filter((internship) =>
+  internship.company?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  internship.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  internship.duration?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  internship.description?.toLowerCase().includes(searchTerm.toLowerCase())
+);
   return (
     <div className="page">
       <Header showNav={true} />
@@ -113,7 +119,15 @@ function ViewInternships({ user }) {
             Back to Dashboard
           </button>
         </div>
-
+      <div className="search-container">
+    <input
+    type="text"
+    placeholder="Search internships..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+      className="search-input"
+        />
+      </div>
         {alreadyApplied && (
           <div className="applied-banner">
             You have already submitted an application. Only one application is
@@ -121,13 +135,13 @@ function ViewInternships({ user }) {
           </div>
         )}
 
-        {internships.length === 0 ? (
+        {filteredInternships.length === 0 ? (
           <div className="empty-state">
             <p>No internships available at the moment.</p>
           </div>
         ) : (
           <div className="internships-grid">
-            {internships.map((internship) => {
+           {filteredInternships.map((internship) => {
               const appliedHere = hasAppliedToThis(internship._id);
 
               return (
