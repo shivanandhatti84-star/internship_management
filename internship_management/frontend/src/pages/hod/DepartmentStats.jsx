@@ -1,3 +1,4 @@
+import API from '../../api';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -13,9 +14,9 @@ function DepartmentStats() {
   const fetchStats = async () => {
     try {
       const [appsRes, internRes, mentorsRes] = await Promise.all([
-        fetch(`https://internship-management-uhf3.onrender.com/applications`),
-        fetch(`https://internship-management-uhf3.onrender.com/internships`),
-        fetch(`https://internship-management-uhf3.onrender.com/auth/mentors`),
+        fetch(`${API}/applications`),
+        fetch(`${API}/internships`),
+        fetch(`${API}/auth/mentors`),
       ]);
       const apps        = await appsRes.json();
       const internships = await internRes.json();

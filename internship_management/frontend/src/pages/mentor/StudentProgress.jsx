@@ -2,6 +2,7 @@
 
 
 
+import API from '../../api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -23,7 +24,7 @@ function StudentProgress({ user }) {
 
       const res = await fetch(
 
-        `https://internship-management-uhf3.onrender.com/mentor/evaluation/${usn}`
+        `${API}/mentor/evaluation/${usn}`
 
       );
 
@@ -58,7 +59,7 @@ function StudentProgress({ user }) {
       return;
     }
     try {
-      const res = await fetch('https://internship-management-uhf3.onrender.com/mentor/evaluation/schedule', {
+      const res = await fetch(`${API}/mentor/evaluation/schedule`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -89,7 +90,7 @@ function StudentProgress({ user }) {
     try {
 
       const res = await fetch(
-        'https://internship-management-uhf3.onrender.com/applications'
+        `${API}/applications`
       );
 
       const data = await res.json();

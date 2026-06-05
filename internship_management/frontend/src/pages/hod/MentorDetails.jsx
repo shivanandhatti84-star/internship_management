@@ -1,3 +1,4 @@
+import API from '../../api';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -12,13 +13,13 @@ function MentorDetails() {
   useEffect(() => { fetchMentors(); fetchAccepted(); }, []);
 
   const fetchMentors = async () => {
-    try { const res = await fetch(`https://internship-management-uhf3.onrender.com/auth/mentors`); setMentors(await res.json()); }
+    try { const res = await fetch(`${API}/auth/mentors`); setMentors(await res.json()); }
     catch { alert('Could not load mentors.'); }
   };
 
   const fetchAccepted = async () => {
     try {
-      const res = await fetch(`https://internship-management-uhf3.onrender.com/applications`);
+      const res = await fetch(`${API}/applications`);
       const data = await res.json();
       setAcceptedApps(data.filter(a => a.status === 'Accepted'));
     } catch { alert('Could not load applications.'); }

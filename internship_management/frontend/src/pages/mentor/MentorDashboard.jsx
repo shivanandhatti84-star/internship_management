@@ -1,3 +1,4 @@
+import API from '../../api';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -12,7 +13,7 @@ function MentorDashboard({ onLogout, user }) {
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        const res = await fetch(`https://internship-management-uhf3.onrender.com/auth/user/${user.usn}`);
+        const res = await fetch(`${API}/auth/user/${user.usn}`);
         if (!res.ok) return;
         const data = await res.json();
         setProfile(data);
@@ -34,7 +35,7 @@ function MentorDashboard({ onLogout, user }) {
       phone: form.get('phone')
     };
     try {
-      const res = await fetch(`https://internship-management-uhf3.onrender.com/auth/user/${user.usn}`, {
+      const res = await fetch(`${API}/auth/user/${user.usn}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)

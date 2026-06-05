@@ -1,273 +1,8 @@
-// import React, { useState, useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import Header from '../../components/Header';
-// import '../../styles/Monitor.css';
-
-// function MonitorApplications({ user }) {
-//   const [applications, setApplications] = useState([]);
-//   const [filterStatus, setFilterStatus] = useState('All');
-//   const navigate = useNavigate();
-
-//   useEffect(() => {
-//     loadApplications();
-//   }, []);
-
-//   // ================= LOAD FROM DATABASE =================
-//   const loadApplications = async () => {
-//     try {
-//       const res = await fetch('http://localhost:5000/applications');
-//       const data = await res.json();
-//       setApplications(data);
-//     } catch (error) {
-//       console.error(error);
-//       alert('Failed to load applications');
-//     }
-//   };
-
-//   const filteredApplications =
-//     filterStatus === 'All'
-//       ? applications
-//       : applications.filter(app => app.status === filterStatus);
-
-//   // ================= ACCEPT / REJECT =================
-//   const handleStatusChange = async (appId, newStatus) => {
-//     const app = applications.find(a => a._id === appId);
-
-//     if (app.status !== 'Pending') {
-//       alert(`This application has already been ${app.status}.`);
-//       return;
-//     }
-
-//     const confirmed = window.confirm(
-//       `Are you sure you want to ${newStatus} ${app.usn}'s application?\nThis cannot be changed later.`
-//     );
-
-//     if (!confirmed) return;
-
-//     try {
-//       const res = await fetch(
-//         `http://localhost:5000/applications/${appId}`,
-//         {
-//           method: 'PUT',
-//           headers: { 'Content-Type': 'application/json' },
-//           body: JSON.stringify({ status: newStatus }),
-//         }
-//       );
-
-//       const data = await res.text();
-//       alert(data);
-
-//       loadApplications();
-//     } catch (error) {
-//       console.error(error);
-//       alert('Failed to update status');
-//     }
-//   };
-
-//   // ================= DELETE =================
-//   const handleDeleteApplication = async (appId) => {
-//     const confirmDelete = window.confirm(
-//       'Are you sure you want to delete this application?'
-//     );
-
-//     if (!confirmDelete) return;
-
-//     try {
-//       const res = await fetch(
-//         `http://localhost:5000/applications/${appId}`,
-//         {
-//           method: 'DELETE',
-//         }
-//       );
-
-//       const data = await res.text();
-//       alert(data);
-
-//       loadApplications();
-//     } catch (error) {
-//       console.error(error);
-//       alert('Failed to delete');
-//     }
-//   };
-
-//   const getStatusColor = (status) => {
-//     switch (status) {
-//       case 'Accepted':
-//         return 'status-accepted';
-//       case 'Rejected':
-//         return 'status-rejected';
-//       case 'Pending':
-//         return 'status-pending';
-//       default:
-//         return '';
-//     }
-//   };
-
-//   const stats = {
-//     total: applications.length,
-//     pending: applications.filter(a => a.status === 'Pending').length,
-//     accepted: applications.filter(a => a.status === 'Accepted').length,
-//     rejected: applications.filter(a => a.status === 'Rejected').length,
-//   };
-
-//   return (
-//     <div className="page">
-//       <Header showNav={true} />
-
-//       <div className="monitor-container">
-//         <div className="page-header">
-//           <h2>Monitor Applications</h2>
-
-//           <button
-//             className="btn-back"
-//             onClick={() => navigate('/coordinator/dashboard')}
-//           >
-//             Back to Dashboard
-//           </button>
-//         </div>
-
-//         {/* Stats */}
-//         <div className="stats-grid">
-//           <div className="stat-card">
-//             <span className="stat-number">{stats.total}</span>
-//             <span className="stat-label">Total</span>
-//           </div>
-
-//           <div className="stat-card pending">
-//             <span className="stat-number">{stats.pending}</span>
-//             <span className="stat-label">Pending</span>
-//           </div>
-
-//           <div className="stat-card accepted">
-//             <span className="stat-number">{stats.accepted}</span>
-//             <span className="stat-label">Accepted</span>
-//           </div>
-
-//           <div className="stat-card rejected">
-//             <span className="stat-number">{stats.rejected}</span>
-//             <span className="stat-label">Rejected</span>
-//           </div>
-//         </div>
-
-//         {/* Filter */}
-//         <div className="filter-section">
-//           <label>Filter by Status:</label>
-
-//           <div className="filter-buttons">
-//             {['All', 'Pending', 'Accepted', 'Rejected'].map(status => (
-//               <button
-//                 key={status}
-//                 className={`filter-btn ${
-//                   filterStatus === status ? 'active' : ''
-//                 }`}
-//                 onClick={() => setFilterStatus(status)}
-//               >
-//                 {status}
-//               </button>
-//             ))}
-//           </div>
-//         </div>
-
-//         {/* Table */}
-//         {filteredApplications.length === 0 ? (
-//           <div className="empty-state">
-//             <p>No applications found.</p>
-//           </div>
-//         ) : (
-//           <div className="applications-table-container">
-//             <table className="applications-table">
-//               <thead>
-//                 <tr>
-//                   <th>USN</th>
-//                   <th>Company</th>
-//                   <th>Role</th>
-//                   <th>Applied Date</th>
-//                   <th>Status</th>
-//                   <th>Action</th>
-//                 </tr>
-//               </thead>
-
-//               <tbody>
-//                 {filteredApplications.map((app) => {
-//                   const isDecided = app.status !== 'Pending';
-
-//                   return (
-//                     <tr key={app._id}>
-//                       <td>{app.usn}</td>
-//                       <td>{app.company}</td>
-//                       <td>{app.role}</td>
-//                       <td>
-//                         {new Date(app.createdAt).toLocaleDateString()}
-//                       </td>
-
-//                       <td>
-//                         {isDecided ? (
-//                           <span
-//                             className={`status-badge-fixed ${getStatusColor(
-//                               app.status
-//                             )}`}
-//                           >
-//                             {app.status}
-//                           </span>
-//                         ) : (
-//                           <div className="action-buttons">
-//                             <button
-//                               className="btn-accept"
-//                               onClick={() =>
-//                                 handleStatusChange(
-//                                   app._id,
-//                                   'Accepted'
-//                                 )
-//                               }
-//                             >
-//                               ✓ Accept
-//                             </button>
-
-//                             <button
-//                               className="btn-reject"
-//                               onClick={() =>
-//                                 handleStatusChange(
-//                                   app._id,
-//                                   'Rejected'
-//                                 )
-//                               }
-//                             >
-//                               ✗ Reject
-//                             </button>
-//                           </div>
-//                         )}
-//                       </td>
-
-//                       <td>
-//                         <button
-//                           className="btn-delete-small"
-//                           onClick={() =>
-//                             handleDeleteApplication(app._id)
-//                           }
-//                         >
-//                           Delete
-//                         </button>
-//                       </td>
-//                     </tr>
-//                   );
-//                 })}
-//               </tbody>
-//             </table>
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default MonitorApplications;
-
-
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import '../../styles/Monitor.css';
+import API from '../../api';
 
 function MonitorApplications({ user }) {
   const [applications, setApplications]     = useState([]);
@@ -281,7 +16,7 @@ function MonitorApplications({ user }) {
 
   const loadApplications = async () => {
     try {
-      const res  = await fetch('https://internship-management-uhf3.onrender.com/applications');
+      const res  = await fetch(`${API}/applications`);
       const data = await res.json();
       setApplications(data);
     } catch (err) {
@@ -294,7 +29,7 @@ function MonitorApplications({ user }) {
     setProfileLoading(true);
     setStudentProfile(null);
     try {
-      const res  = await fetch(`https://internship-management-uhf3.onrender.com/profile/${usn}`);
+      const res  = await fetch(`${API}/profile/${usn}`);
       const data = await res.json();
       setStudentProfile(data);
     } catch (err) {
@@ -329,7 +64,7 @@ function MonitorApplications({ user }) {
     )) return;
 
     try {
-      const res = await fetch(`https://internship-management-uhf3.onrender.com/applications/${appId}`, {
+      const res = await fetch(`${API}/applications/${appId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus }),
@@ -348,7 +83,7 @@ function MonitorApplications({ user }) {
   const handleDeleteApplication = async (appId) => {
     if (!window.confirm('Are you sure you want to delete this application?')) return;
     try {
-      const res = await fetch(`https://internship-management-uhf3.onrender.com/applications/${appId}`, { method: 'DELETE' });
+      const res = await fetch(`${API}/applications/${appId}`, { method: 'DELETE' });
       const msg = await res.text();
       alert(msg);
       loadApplications();
@@ -477,7 +212,7 @@ function MonitorApplications({ user }) {
                         <button
                           className={`btn-view-profile ${selectedApp?._id === app._id ? 'active' : ''}`}
                           onClick={() =>
-                            selectedApp?._id === app._id
+                              selectedApp?._id === app._id
                               ? handleCloseDrawer()
                               : handleViewProfile(app)
                           }
@@ -552,7 +287,7 @@ function MonitorApplications({ user }) {
                   {studentProfile.resume && studentProfile.resume.path ? (
                     <div className="drawer-resume">
                       <a
-                        href={`https://internship-management-uhf3.onrender.com${studentProfile.resume.path}`}
+                        href={`${API}${studentProfile.resume.path}`}
                         target="_blank"
                         rel="noreferrer"
                       >
@@ -562,7 +297,7 @@ function MonitorApplications({ user }) {
                       {studentProfile.resume.contentType && studentProfile.resume.contentType.includes('pdf') && (
                         <div className="resume-preview">
                           <iframe
-                            src={`https://internship-management-uhf3.onrender.com${studentProfile.resume.path}`}
+                            src={`${API}${studentProfile.resume.path}`}
                             title="Resume Preview"
                             width="100%"
                             height="300px"
@@ -576,20 +311,20 @@ function MonitorApplications({ user }) {
                 </div>
 
                 {/* Application details */}
-                
-<div className="drawer-section-label">Application Details</div>
-<div className="drawer-fields">
-  <div className="drawer-field-row">
-    <span className="df-label">Applied On</span>
-    <span className="df-value">{formatDate(selectedApp.appliedDate)}</span>
-  </div>
-  <div className="drawer-field-row">
-    <span className="df-label">Status</span>
-    <span className={`df-value status-badge ${statusClass(selectedApp.status)}`}>
-      {selectedApp.status}
-    </span>
-  </div>
-</div>
+                <div className="drawer-section-label">Application Details</div>
+                <div className="drawer-fields">
+                  <div className="drawer-field-row">
+                    <span className="df-label">Applied On</span>
+                    <span className="df-value">{formatDate(selectedApp.appliedDate)}</span>
+                  </div>
+                  <div className="drawer-field-row">
+                    <span className="df-label">Status</span>
+                    <span className={`df-value status-badge ${statusClass(selectedApp.status)}`}>
+                      {selectedApp.status}
+                    </span>
+                  </div>
+                </div>
+
                 {/* Quick actions if still pending */}
                 {selectedApp.status === 'Pending' && (
                   <div className="drawer-action-row">

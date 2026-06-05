@@ -1,3 +1,4 @@
+import API from '../../api';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -18,7 +19,7 @@ function ViewInternships({ user }) {
   // ================= LOAD INTERNSHIPS =================
   const loadInternships = async () => {
     try {
-      const res = await fetch('https://internship-management-uhf3.onrender.com/internships');
+      const res = await fetch(`${API}/internships`);
       const data = await res.json();
       setInternships(data);
     } catch (error) {
@@ -30,7 +31,7 @@ function ViewInternships({ user }) {
   // ================= LOAD APPLICATIONS =================
   const loadApplications = async () => {
     try {
-      const res = await fetch('https://internship-management-uhf3.onrender.com/applications');
+      const res = await fetch(`${API}/applications`);
       const data = await res.json();
       setApplications(data);
     } catch (error) {
@@ -73,7 +74,7 @@ function ViewInternships({ user }) {
     setLoading(true);
 
     try {
-      const res = await fetch('https://internship-management-uhf3.onrender.com/applications/apply', {
+      const res = await fetch(`${API}/applications/apply`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

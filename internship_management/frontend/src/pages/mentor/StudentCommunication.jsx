@@ -1,3 +1,4 @@
+import API from '../../api';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -20,7 +21,7 @@ function StudentCommunication({ user }) {
 
   const fetchMyStudents = async () => {
     try {
-      const res = await fetch(`https://internship-management-uhf3.onrender.com/applications`);
+      const res = await fetch(`${API}/applications`);
       const data = await res.json();
       setStudents(data.filter(a => a.status === 'Accepted' && a.mentorUsn === user?.usn));
     } catch { alert('Could not load students.'); }
@@ -28,7 +29,7 @@ function StudentCommunication({ user }) {
 
   const fetchMessages = async (usn) => {
     try {
-      const res = await fetch(`https://internship-management-uhf3.onrender.com/mentor/messages/${usn}`);
+      const res = await fetch(`${API}/mentor/messages/${usn}`);
       const data = await res.json();
       setMessages(data);
     } catch { setMessages([]); }
@@ -38,7 +39,7 @@ function StudentCommunication({ user }) {
     if (!newMessage.trim() || !selectedStudent) return;
     setSending(true);
     try {
-      const res = await fetch(`https://internship-management-uhf3.onrender.com/mentor/messages/send`, {
+      const res = await fetch(`${API}/mentor/messages/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

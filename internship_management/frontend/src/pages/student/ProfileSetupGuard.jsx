@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import API from '../../api';
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import '../../styles/Profile.css';
@@ -41,7 +42,7 @@ function ProfileSetupGuard({ user, children }) {
   const checkProfile = async () => {
     if (!user?.usn) { setChecking(false); return; }
     try {
-      const res  = await fetch(`https://internship-management-uhf3.onrender.com/profile/${user.usn}`);
+      const res  = await fetch(`${API}/profile/${user.usn}`);
       const data = await res.json();
       setProfile(data);
       // Pre-fill form with whatever exists
@@ -87,7 +88,7 @@ function ProfileSetupGuard({ user, children }) {
 
     setSaving(true);
     try {
-      const res = await fetch('https://internship-management-uhf3.onrender.com/profile/save', {
+      const res = await fetch(`${API}/profile/save`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, usn: user?.usn }),

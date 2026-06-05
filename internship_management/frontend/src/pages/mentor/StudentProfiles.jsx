@@ -1,4 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
+import API from '../../api';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -27,7 +28,7 @@ function StudentProfiles({ user }) {
 
     try {
 
-      const appsRes = await fetch('https://internship-management-uhf3.onrender.com/applications');
+      const appsRes = await fetch(`${API}/applications`);
       const appsData = await appsRes.json();
 
       console.log("Applications:", appsData);
@@ -68,7 +69,7 @@ function StudentProfiles({ user }) {
 
       console.log("Fetching profile for:", usn);
 
-      const res = await fetch(`https://internship-management-uhf3.onrender.com/profile/${usn}`);
+      const res = await fetch(`${API}/profile/${usn}`);
 
       const data = await res.json();
 

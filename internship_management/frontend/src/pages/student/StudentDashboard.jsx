@@ -1,3 +1,4 @@
+import API from '../../api';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -12,7 +13,7 @@ function StudentDashboard({ onLogout, user }) {
     const loadEvaluations = async () => {
       if (!user?.usn) return;
       try {
-        const res = await fetch(`https://internship-management-uhf3.onrender.com/mentor/evaluation/${user.usn}`);
+        const res = await fetch(`${API}/mentor/evaluation/${user.usn}`);
         if (!res.ok) throw new Error('Failed to load evaluations');
         const data = await res.json();
         const evaluationsData = Array.isArray(data) ? data : [];

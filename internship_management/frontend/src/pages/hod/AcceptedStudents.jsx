@@ -1,3 +1,4 @@
+import API from '../../api';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -15,7 +16,7 @@ function AcceptedStudents() {
 
   const fetchAccepted = async () => {
     try {
-      const res = await fetch(`https://internship-management-uhf3.onrender.com/applications`);
+      const res = await fetch(`${API}/applications`);
       const data = await res.json();
       const accepted = data.filter(a => a.status === 'Accepted');
       setAcceptedApps(accepted);
@@ -27,7 +28,7 @@ function AcceptedStudents() {
 
   const fetchMentors = async () => {
     try {
-      const res = await fetch(`https://internship-management-uhf3.onrender.com/auth/mentors`);
+      const res = await fetch(`${API}/auth/mentors`);
       const data = await res.json();
       setMentors(data);
     } catch { alert('Could not load mentors.'); }
@@ -44,7 +45,7 @@ function AcceptedStudents() {
 
     setSaving(app._id);
     try {
-      const res = await fetch(`https://internship-management-uhf3.onrender.com/applications/${app._id}/assign-mentor`, {
+      const res = await fetch(`${API}/applications/${app._id}/assign-mentor`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mentorUsn }),

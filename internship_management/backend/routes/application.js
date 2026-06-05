@@ -84,6 +84,8 @@ const express = require("express");
 const router = express.Router();
 const Application = require("../models/application");
 const Internship = require("../models/Internship");
+const User = require("../models/user");
+const { sendMentorAssignmentEmails } = require("../utils/emailHelper");
 
 // APPLY — one application per student enforced at DB level
 router.post("/apply", async (req, res) => {
@@ -168,9 +170,42 @@ router.delete("/:id", async (req, res) => {
 router.put("/:id/assign-mentor", async (req, res) => {
   try {
     const { mentorUsn } = req.body;
-    await Application.findByIdAndUpdate(req.params.id, { mentorUsn });
+    
+    // Find the application to get the student's USN and company details
+    const app = await Application.findById(req.params.id);
+    if (!app) {
+      return res.status(404).send("Application not found");
+    }
+
+    // Update the mentor USN
+    app.mentorUsn = mentorUsn;
+    await app.save();
+
+    // Look up Student and Mentor details for sending email
+    try {
+      const student = await User.findOne({ usn: app.usn });
+      const mentor = await User.findOne({ usn: mentorUsn, role: "mentor" });
+
+      if (student && mentor) {
+        sendMentorAssignmentEmails({
+          studentEmail: student.email,
+          studentName: student.name || student.usn,
+          studentUsn: student.usn,
+          mentorEmail: mentor.email,
+          mentorName: mentor.name || mentor.usn,
+          mentorUsn: mentor.usn,
+          company: app.company || "Assigned Company"
+        }).catch(err => console.error("Error sending mentor assignment emails:", err));
+      } else {
+        console.warn(`Could not find student (${app.usn}) or mentor (${mentorUsn}) user account to send emails.`);
+      }
+    } catch (emailErr) {
+      console.error("Failed to process emails for mentor assignment:", emailErr);
+    }
+
     res.send("Mentor assigned");
   } catch (err) {
+    console.error(err);
     res.status(500).send("Server error");
   }
 });

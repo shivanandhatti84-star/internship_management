@@ -117,6 +117,8 @@
 const express = require("express");
 const router  = express.Router();
 const Evaluation = require("../models/Evaluation");
+const User = require("../models/user");
+const { sendEvaluationScheduledEmail } = require("../utils/emailHelper");
 
 // ============================
 // SAVE / UPDATE EVALUATION
@@ -185,6 +187,26 @@ router.post("/evaluation/schedule", async (req, res) => {
         scheduledAt: new Date(scheduledAt),
       });
       await existing.save();
+    }
+
+    // Send email notification to student asynchronously
+    try {
+      const student = await User.findOne({ usn });
+      const mentor = await User.findOne({ usn: mentorUsn, role: "mentor" });
+
+      if (student) {
+        sendEvaluationScheduledEmail({
+          studentEmail: student.email,
+          studentName: student.name || student.usn,
+          mentorName: mentor ? (mentor.name || mentor.usn) : "Your Mentor",
+          evaluationNumber,
+          scheduledAt: new Date(scheduledAt)
+        }).catch(err => console.error("Error sending evaluation scheduled email:", err));
+      } else {
+        console.warn(`Could not find student (${usn}) user account to send evaluation scheduled email.`);
+      }
+    } catch (emailErr) {
+      console.error("Failed to process email info for evaluation schedule:", emailErr);
     }
 
     res.send("Evaluation scheduled successfully");

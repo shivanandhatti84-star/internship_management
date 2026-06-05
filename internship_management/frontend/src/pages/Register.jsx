@@ -1,3 +1,4 @@
+import API from '../api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
@@ -45,7 +46,7 @@ function Register() {
     }
 
     try {
-      const res = await fetch('https://internship-management-uhf3.onrender.com/auth/register', {
+      const res = await fetch(`${API}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ usn, email, role, password }),

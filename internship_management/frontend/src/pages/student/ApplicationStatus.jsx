@@ -1,3 +1,4 @@
+import API from '../../api';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -15,7 +16,7 @@ function ApplicationStatus({ user }) {
   // ================= LOAD FROM DATABASE =================
   const loadApplications = async () => {
     try {
-      const res = await fetch('https://internship-management-uhf3.onrender.com/applications');
+      const res = await fetch(`${API}/applications`);
       const data = await res.json();
 
       const userApps = data.filter(app => app.usn === user?.usn);

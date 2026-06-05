@@ -1,3 +1,4 @@
+import API from '../../api';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -52,7 +53,7 @@ function EvaluationReports({ user }) {
 
     try {
 
-      const res = await fetch(`https://internship-management-uhf3.onrender.com/applications`);
+      const res = await fetch(`${API}/applications`);
       const data = await res.json();
 
       const assigned = data.filter(
@@ -113,7 +114,7 @@ function EvaluationReports({ user }) {
     try {
 
       const res = await fetch(
-        `https://internship-management-uhf3.onrender.com/mentor/evaluation/save`,
+        `${API}/mentor/evaluation/save`,
         {
           method: 'POST',
           headers: {
