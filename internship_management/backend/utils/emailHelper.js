@@ -1,28 +1,15 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-// Create standard transporter using environment variables
-const createTransporter = () => {
-  const host = process.env.SMTP_HOST;
-  const port = parseInt(process.env.SMTP_PORT || "587", 10);
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
-  const secure = process.env.SMTP_SECURE === "true";
+// Initialize Resend with the API key from environment variables
+const getResendClient = () => {
+  const apiKey = process.env.RESEND_API_KEY;
 
-  // Check if credentials are placeholders or missing
-  if (!user || user.includes("your-email") || !pass || pass.includes("your-app-password")) {
-    console.warn("⚠️ SMTP credentials not fully configured in environment variables. Email sending will be simulated.");
+  if (!apiKey || apiKey.includes("your_api_key")) {
+    console.warn("⚠️ Resend API Key is not configured. Email sending will be simulated.");
     return null;
   }
 
-  return nodemailer.createTransport({
-    host,
-    port,
-    secure,
-    auth: {
-      user,
-      pass
-    }
-  });
+  return new Resend(apiKey);
 };
 
 /**
@@ -37,10 +24,10 @@ const sendMentorAssignmentEmails = async ({
   mentorUsn,
   company
 }) => {
-  const fromEmail = process.env.EMAIL_FROM || "Internship Portal <noreply@example.com>";
-  const transporter = createTransporter();
+  const fromEmail = process.env.EMAIL_FROM || "onboarding@resend.dev";
+  const resendClient = getResendClient();
 
-  // HTML content for student
+  // HTML templates
   const studentHtml = `
     <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
       <h2 style="color: #4A90E2; border-bottom: 2px solid #4A90E2; padding-bottom: 10px;">Mentor Assigned Successfully</h2>
@@ -50,7 +37,7 @@ const sendMentorAssignmentEmails = async ({
         <h4 style="margin: 0 0 10px 0; color: #333;">Mentor Details:</h4>
         <p style="margin: 5px 0;"><strong>Name:</strong> ${mentorName}</p>
         <p style="margin: 5px 0;"><strong>USN/ID:</strong> ${mentorUsn}</p>
-        <p style="margin: 5px 0;"><strong>Email:</strong> <a href="mailto:${mentorEmail}">${mentorEmail}</a></p>
+        <p style="margin: 5px 0;"><strong>Email:</strong> ${mentorEmail}</p>
       </div>
       <p>Please get in touch with your mentor to discuss your internship progress and evaluations.</p>
       <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
@@ -58,7 +45,6 @@ const sendMentorAssignmentEmails = async ({
     </div>
   `;
 
-  // HTML content for mentor
   const mentorHtml = `
     <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
       <h2 style="color: #4A90E2; border-bottom: 2px solid #4A90E2; padding-bottom: 10px;">New Student Assignment</h2>
@@ -68,7 +54,7 @@ const sendMentorAssignmentEmails = async ({
         <h4 style="margin: 0 0 10px 0; color: #333;">Student Details:</h4>
         <p style="margin: 5px 0;"><strong>Name:</strong> ${studentName}</p>
         <p style="margin: 5px 0;"><strong>USN:</strong> ${studentUsn}</p>
-        <p style="margin: 5px 0;"><strong>Email:</strong> <a href="mailto:${studentEmail}">${studentEmail}</a></p>
+        <p style="margin: 5px 0;"><strong>Email:</strong> ${studentEmail}</p>
       </div>
       <p>Please reach out to the student to guide them and schedule their evaluations.</p>
       <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;" />
@@ -76,7 +62,7 @@ const sendMentorAssignmentEmails = async ({
     </div>
   `;
 
-  if (!transporter) {
+  if (!resendClient) {
     console.log("=== SIMULATED MENTOR ASSIGNMENT EMAILS ===");
     console.log(`To Student: [${studentEmail}]`);
     console.log(`Subject: Mentor Assigned - ${company}`);
@@ -90,24 +76,32 @@ const sendMentorAssignmentEmails = async ({
 
   try {
     // Send to Student
-    await transporter.sendMail({
+    const studentRes = await resendClient.emails.send({
       from: fromEmail,
       to: studentEmail,
       subject: `Mentor Assigned for your Internship at ${company}`,
       html: studentHtml
     });
-    console.log(`Assignment email successfully sent to Student: ${studentEmail}`);
+    if (studentRes.error) {
+      console.error("Resend Student error details:", studentRes.error);
+    } else {
+      console.log(`Assignment email successfully sent to Student: ${studentEmail} (ID: ${studentRes.data?.id})`);
+    }
 
     // Send to Mentor
-    await transporter.sendMail({
+    const mentorRes = await resendClient.emails.send({
       from: fromEmail,
       to: mentorEmail,
       subject: `New Student Assigned: ${studentName} (${studentUsn})`,
       html: mentorHtml
     });
-    console.log(`Assignment email successfully sent to Mentor: ${mentorEmail}`);
+    if (mentorRes.error) {
+      console.error("Resend Mentor error details:", mentorRes.error);
+    } else {
+      console.log(`Assignment email successfully sent to Mentor: ${mentorEmail} (ID: ${mentorRes.data?.id})`);
+    }
   } catch (error) {
-    console.error("Error sending assignment emails via SMTP:", error);
+    console.error("Error sending assignment emails via Resend HTTP API:", error);
     throw error;
   }
 };
@@ -122,8 +116,8 @@ const sendEvaluationScheduledEmail = async ({
   evaluationNumber,
   scheduledAt
 }) => {
-  const fromEmail = process.env.EMAIL_FROM || "Internship Portal <noreply@example.com>";
-  const transporter = createTransporter();
+  const fromEmail = process.env.EMAIL_FROM || "onboarding@resend.dev";
+  const resendClient = getResendClient();
 
   const formattedDate = new Date(scheduledAt).toLocaleString('en-US', {
     weekday: 'long',
@@ -152,7 +146,7 @@ const sendEvaluationScheduledEmail = async ({
     </div>
   `;
 
-  if (!transporter) {
+  if (!resendClient) {
     console.log("=== SIMULATED EVALUATION SCHEDULED EMAIL ===");
     console.log(`To Student: [${studentEmail}]`);
     console.log(`Subject: Internship Evaluation Scheduled - Evaluation #${evaluationNumber}`);
@@ -162,15 +156,19 @@ const sendEvaluationScheduledEmail = async ({
   }
 
   try {
-    await transporter.sendMail({
+    const res = await resendClient.emails.send({
       from: fromEmail,
       to: studentEmail,
       subject: `Internship Evaluation Scheduled: Evaluation #${evaluationNumber}`,
       html: htmlContent
     });
-    console.log(`Evaluation scheduled email successfully sent to Student: ${studentEmail}`);
+    if (res.error) {
+      console.error("Resend Evaluation error details:", res.error);
+    } else {
+      console.log(`Evaluation scheduled email successfully sent to Student: ${studentEmail} (ID: ${res.data?.id})`);
+    }
   } catch (error) {
-    console.error("Error sending evaluation scheduled email via SMTP:", error);
+    console.error("Error sending evaluation scheduled email via Resend HTTP API:", error);
     throw error;
   }
 };
