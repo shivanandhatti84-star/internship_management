@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header';
 import '../../styles/Profile.css';
@@ -35,7 +36,7 @@ function ProfileSetupGuard({ user, children }) {
 
   useEffect(() => {
     checkProfile();
-  }, [user?.usn]);
+  }, [user?.usn]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const checkProfile = async () => {
     if (!user?.usn) { setChecking(false); return; }

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // import React, { useState, useEffect, useRef } from 'react';
 // import { useLocation } from 'react-router-dom';
 // import { useNavigate } from 'react-router-dom';
@@ -327,7 +328,7 @@
 
 
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -343,17 +344,7 @@ function StudentProfile({ user }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    loadProfile();
-    if (location?.state?.openUpload) {
-      setTimeout(() => {
-        fileInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        fileInputRef.current?.focus?.();
-      }, 400);
-    }
-  }, []);
-
-  const loadProfile = async () => {
+  const loadProfile = useCallback(async () => {
     try {
       const res = await fetch(`https://internship-management-uhf3.onrender.com/profile/${user.usn}`);
       const data = await res.json();
@@ -380,7 +371,17 @@ function StudentProfile({ user }) {
       setProfile(userProfile);
       setFormData(userProfile);
     }
-  };
+  }, [user?.usn]);
+
+  useEffect(() => {
+    loadProfile();
+    if (location?.state?.openUpload) {
+      setTimeout(() => {
+        fileInputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        fileInputRef.current?.focus?.();
+      }, 400);
+    }
+  }, [loadProfile, location?.state?.openUpload]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

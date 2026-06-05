@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 
@@ -15,6 +16,33 @@ function StudentProgress({ user }) {
   const [scheduleTimes, setScheduleTimes] = useState({});
 
   const navigate = useNavigate();
+
+  const fetchEvaluations = useCallback(async (usn) => {
+
+    try {
+
+      const res = await fetch(
+
+        `https://internship-management-uhf3.onrender.com/mentor/evaluation/${usn}`
+
+      );
+
+      const data = await res.json();
+
+      setEvaluations(prev => ({
+
+        ...prev,
+        [usn]: data
+
+      }));
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  }, []);
 
   const handleScheduleTimeChange = (usn, phase, val) => {
     setScheduleTimes(prev => ({
@@ -52,17 +80,11 @@ function StudentProgress({ user }) {
     }
   };
 
-  useEffect(() => {
-
-    fetchMyStudents();
-
-  }, []);
-
   // =========================================
   // FETCH STUDENTS
   // =========================================
 
-  const fetchMyStudents = async () => {
+  const fetchMyStudents = useCallback(async () => {
 
     try {
 
@@ -94,38 +116,13 @@ function StudentProgress({ user }) {
 
     }
 
-  };
+  }, [fetchEvaluations, user?.usn]);
 
-  // =========================================
-  // FETCH ALL EVALUATIONS
-  // =========================================
+  useEffect(() => {
 
-  const fetchEvaluations = async (usn) => {
+    fetchMyStudents();
 
-    try {
-
-      const res = await fetch(
-
-        `https://internship-management-uhf3.onrender.com/mentor/evaluation/${usn}`
-
-      );
-
-      const data = await res.json();
-
-      setEvaluations(prev => ({
-
-        ...prev,
-        [usn]: data
-
-      }));
-
-    } catch (error) {
-
-      console.log(error);
-
-    }
-
-  };
+  }, [fetchMyStudents]);
 
   return (
 

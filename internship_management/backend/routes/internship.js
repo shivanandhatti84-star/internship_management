@@ -10,13 +10,40 @@ const Internship = require("../models/Internship");
 // ============================
 router.post("/add", async (req, res) => {
   try {
-    const internship = new Internship(req.body);
+    const { company, location, duration, startDate, stipend, slots, description } = req.body;
+    const stipendAmount = Number(stipend);
+    const slotCount = Number(slots);
+
+    if (!company || !duration || !startDate) {
+      return res.status(400).send("Company, duration, and start date are required");
+    }
+
+    if (!Number.isFinite(stipendAmount) || stipendAmount < 0) {
+      return res.status(400).send("Stipend must be a valid number");
+    }
+
+    if (!Number.isInteger(slotCount) || slotCount < 1) {
+      return res.status(400).send("Slots must be at least 1");
+    }
+
+    const internship = new Internship({
+      company,
+      location,
+      duration,
+      startDate,
+      stipend: stipendAmount,
+      slots: slotCount,
+      description
+    });
     await internship.save();
 
     res.send("Internship added successfully");
   } catch (error) {
-    console.log(error);
-    res.status(500).send("Error adding internship");
+    console.error("Error adding internship:", error);
+    if (error.name === "ValidationError") {
+      return res.status(400).send(error.message);
+    }
+    res.status(500).send(error.message || "Error adding internship");
   }
 });
 

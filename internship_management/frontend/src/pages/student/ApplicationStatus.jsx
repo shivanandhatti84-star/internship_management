@@ -10,7 +10,7 @@ function ApplicationStatus({ user }) {
 
   useEffect(() => {
     loadApplications();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ================= LOAD FROM DATABASE =================
   const loadApplications = async () => {

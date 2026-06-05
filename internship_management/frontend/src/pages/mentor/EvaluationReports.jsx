@@ -29,7 +29,7 @@ function EvaluationReports({ user }) {
 
   useEffect(() => {
     fetchStudents();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);

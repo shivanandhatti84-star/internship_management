@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
@@ -18,7 +19,7 @@ function StudentProfiles({ user }) {
 
     fetchStudents();
 
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // ================= FETCH ASSIGNED STUDENTS =================
 

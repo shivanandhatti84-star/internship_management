@@ -10,6 +10,12 @@ const connectDB = async () => {
     } catch (e) {
       // index might not exist
     }
+    try {
+      await mongoose.connection.db.collection("users").dropIndex("usn_1");
+      console.log("Dropped unique index users.usn_1 ✅");
+    } catch (e) {
+      // index might not exist
+    }
   } catch (err) {
     console.log(err);
     process.exit(1);
