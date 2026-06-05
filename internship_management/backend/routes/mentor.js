@@ -189,10 +189,10 @@ router.post("/evaluation/schedule", async (req, res) => {
       await existing.save();
     }
 
-    // Send email notification to student asynchronously
+    // Send email notification to student asynchronously (case-insensitive)
     try {
-      const student = await User.findOne({ usn });
-      const mentor = await User.findOne({ usn: mentorUsn, role: "mentor" });
+      const student = await User.findOne({ usn: new RegExp(`^${usn}$`, "i") });
+      const mentor = await User.findOne({ usn: new RegExp(`^${mentorUsn}$`, "i"), role: "mentor" });
 
       if (student) {
         sendEvaluationScheduledEmail({
