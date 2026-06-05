@@ -1,2 +1,2 @@
-const API = process.env.REACT_APP_API_URL || "http://localhost:5000";
+const API = process.env.REACT_APP_API_URL || "https://internship-management-uhf3.onrender.com";
 export default API;
