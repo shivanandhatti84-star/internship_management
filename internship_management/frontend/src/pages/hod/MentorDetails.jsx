@@ -25,7 +25,7 @@ function MentorDetails() {
     } catch { alert('Could not load applications.'); }
   };
 
-  const getStudentsForMentor = (usn) => acceptedApps.filter(a => a.mentorUsn === usn);
+  const getStudentsForMentor = (mentorId) => acceptedApps.filter(a => a.mentorUsn === mentorId);
 
   return (
     <div className="page">
@@ -41,13 +41,14 @@ function MentorDetails() {
         ) : (
           <div className="mentor-cards">
             {mentors.map(mentor => {
-              const students = getStudentsForMentor(mentor.usn);
+              const mentorKey = mentor.name || mentor.usn;
+              const students = getStudentsForMentor(mentorKey);
               return (
-                <div key={mentor.usn} className="mentor-card">
+                <div key={mentorKey} className="mentor-card">
                   <div className="mentor-card-header">
-                    <div className="mentor-avatar">{mentor.usn.charAt(0).toUpperCase()}</div>
+                    <div className="mentor-avatar">{(mentorKey || 'M').charAt(0).toUpperCase()}</div>
                     <div>
-                      <h3>{mentor.usn}</h3>
+                      <h3>{mentorKey}</h3>
                       <p className="mentor-email">{mentor.email || '—'}</p>
                     </div>
                     <span className="student-count-badge">{students.length} student{students.length !== 1 ? 's' : ''}</span>
@@ -61,6 +62,8 @@ function MentorDetails() {
                           <tr>
                             <th>Serial No.</th>
                             <th>USN</th>
+                            <th>Name</th>
+                            <th>Gmail/Email</th>
                             <th>Company</th>
                           </tr>
                         </thead>
@@ -69,6 +72,8 @@ function MentorDetails() {
                             <tr key={s._id}>
                               <td>{index + 1}</td>
                               <td>{s.usn || '—'}</td>
+                              <td>{s.studentName || '—'}</td>
+                              <td>{s.studentEmail || '—'}</td>
                               <td>{s.company || s.internshipId?.company || '—'}</td>
                             </tr>
                           ))}

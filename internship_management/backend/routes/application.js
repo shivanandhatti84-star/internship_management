@@ -184,7 +184,13 @@ router.put("/:id/assign-mentor", async (req, res) => {
     // Look up Student and Mentor details for sending email (case-insensitive)
     try {
       const student = await User.findOne({ usn: new RegExp(`^${app.usn}$`, "i") });
-      const mentor = await User.findOne({ usn: new RegExp(`^${mentorUsn}$`, "i"), role: "mentor" });
+      const mentor = await User.findOne({
+        $or: [
+          { usn: new RegExp(`^${mentorUsn}$`, "i") },
+          { name: new RegExp(`^${mentorUsn}$`, "i") }
+        ],
+        role: "mentor"
+      });
 
       if (student && mentor) {
         sendMentorAssignmentEmails({
@@ -193,7 +199,7 @@ router.put("/:id/assign-mentor", async (req, res) => {
           studentUsn: student.usn,
           mentorEmail: mentor.email,
           mentorName: mentor.name || mentor.usn,
-          mentorUsn: mentor.usn,
+          mentorUsn: mentor.usn || mentor.name,
           company: app.company || "Assigned Company"
         }).catch(err => console.error("Error sending mentor assignment emails:", err));
       } else {

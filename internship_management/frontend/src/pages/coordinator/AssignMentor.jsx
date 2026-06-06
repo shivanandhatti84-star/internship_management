@@ -93,15 +93,20 @@ function AssignMentor() {
                           onChange={e => setAssignments(prev => ({ ...prev, [app._id]: e.target.value }))}
                         >
                           <option value="">-- Select Mentor --</option>
-                          {mentors.map(m => (
-                            <option key={m.usn} value={m.usn}>{m.name ? `${m.name} (${m.usn})` : `${m.usn} (${m.email})`}</option>
-                          ))}
+                          {mentors.map(m => {
+                            const mentorVal = m.name || m.usn;
+                            return (
+                              <option key={mentorVal} value={mentorVal}>
+                                {m.name ? `${m.name} (${m.email})` : `${m.usn} (${m.email})`}
+                              </option>
+                            );
+                          })}
                         </select>
                       )}
                     </td>
                     <td>
                       {app.mentorUsn
-                        ? <span className="assigned-badge">✅ { (mentors.find(x => x.usn === app.mentorUsn)?.name) || app.mentorUsn }</span>
+                        ? <span className="assigned-badge">✅ { (mentors.find(x => (x.name || x.usn) === app.mentorUsn)?.name) || app.mentorUsn }</span>
                         : <span className="unassigned-badge">⏳ Not Assigned</span>}
                     </td>
                     <td>

@@ -116,7 +116,7 @@ import AssignMentor from './pages/coordinator/AssignMentor';
 import EvaluationReports from './pages/mentor/EvaluationReports';
 import StudentProgress from './pages/mentor/StudentProgress';
 import StudentProfiles from './pages/mentor/StudentProfiles';
-
+import PortalLayout from './components/PortalLayout';
 
 import './styles/App.css';
 
@@ -158,7 +158,7 @@ function App() {
 
         {/* Protected Routes - Student (wrapped with ProfileSetupGuard) */}
         {isAuthenticated && userRole === 'student' ? (
-          <>
+          <Route element={<PortalLayout onLogout={handleLogout} />}>
             <Route path="/student/dashboard" element={
               <ProfileSetupGuard user={userData}>
                 <StudentDashboard onLogout={handleLogout} user={userData} />
@@ -177,69 +177,63 @@ function App() {
             {/* Profile page does NOT need the guard — student is editing here */}
             <Route path="/student/profile" element={<StudentProfile user={userData} />} />
             <Route path="/student/evaluation-results" element={<StudentEvaluationResults user={userData} />} />
-          </>
+          </Route>
         ) : null}
 
         {/* Protected Routes - Coordinator */}
         {isAuthenticated && userRole === 'coordinator' ? (
-          <>
+          <Route element={<PortalLayout onLogout={handleLogout} />}>
             <Route path="/coordinator/dashboard" element={<CoordinatorDashboard onLogout={handleLogout} user={userData} />} />
             <Route path="/coordinator/add-internship" element={<AddInternship user={userData} />} />
             <Route path="/coordinator/monitor" element={<MonitorApplications user={userData} />} />
             <Route path="/coordinator/assign-mentor" element={<AssignMentor />} />
-          </>
+          </Route>
         ) : null}
 
-{/* Protected Routes - Mentor */}
-{isAuthenticated && userRole === 'mentor' ? (
-  <>
-    <Route
-      path="/mentor/dashboard"
-      element={<MentorDashboard onLogout={handleLogout} user={userData} />}
-    />
+        {/* Protected Routes - Mentor */}
+        {isAuthenticated && userRole === 'mentor' ? (
+          <Route element={<PortalLayout onLogout={handleLogout} />}>
+            <Route
+              path="/mentor/dashboard"
+              element={<MentorDashboard onLogout={handleLogout} user={userData} />}
+            />
+            <Route
+              path="/mentor/evaluation"
+              element={<EvaluationReports user={userData} />}
+            />
+            <Route
+              path="/mentor/progress"
+              element={<StudentProgress user={userData} />}
+            />
+            <Route
+              path="/mentor/student-profiles"
+              element={<StudentProfiles user={userData} />}
+            />
+          </Route>
+        ) : null}
 
-    <Route
-      path="/mentor/evaluation"
-      element={<EvaluationReports user={userData} />}
-    />
-
-    <Route
-      path="/mentor/progress"
-      element={<StudentProgress user={userData} />}
-    />
-
-     <Route
-      path="/mentor/student-profiles"
-      element={<StudentProfiles user={userData} />}
-    /> 
-  </>
-) : null}
-
-
-       {/* Protected Routes - HOD */}
-{isAuthenticated && userRole === 'hod' ? (
-  <>
-    <Route
-      path="/hod/dashboard"
-      element={
-        <HODDashboard
-          onLogout={handleLogout}
-          user={userData}
-        />
-      }
-    />
-
-    <Route
-      path="/hod/mentor-details"
-      element={<MentorDetails />}
-    />
-
-    <Route
-      path="/hod/department-stats"
-      element={<DepartmentStats />}
-    />
-  </>
-) : null}
+        {/* Protected Routes - HOD */}
+        {isAuthenticated && userRole === 'hod' ? (
+          <Route element={<PortalLayout onLogout={handleLogout} />}>
+            <Route
+              path="/hod/dashboard"
+              element={
+                <HODDashboard
+                  onLogout={handleLogout}
+                  user={userData}
+                />
+              }
+            />
+            <Route
+              path="/hod/mentor-details"
+              element={<MentorDetails />}
+            />
+            <Route
+              path="/hod/department-stats"
+              element={<DepartmentStats />}
+            />
+          </Route>
+        ) : null}
 
         {/* Default redirect */}
         <Route path="/" element={<Navigate to={isAuthenticated ? `/${userRole}/dashboard` : '/login'} />} />

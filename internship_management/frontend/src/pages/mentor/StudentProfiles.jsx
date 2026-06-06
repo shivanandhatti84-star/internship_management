@@ -39,12 +39,12 @@ function StudentProfiles({ user }) {
           "Checking:",
           app.mentorUsn,
           "===",
-          user?.usn
+          user?.name || user?.usn
         );
 
         return (
           app.status === 'Accepted' &&
-          app.mentorUsn === user?.usn
+          app.mentorUsn === (user?.name || user?.usn)
         );
 
       });

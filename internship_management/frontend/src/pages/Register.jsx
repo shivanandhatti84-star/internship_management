@@ -6,6 +6,7 @@ import '../styles/Auth.css';
 
 function Register() {
   const [usn, setUsn] = useState('');
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('');
   const [password, setPassword] = useState('');
@@ -46,10 +47,14 @@ function Register() {
     }
 
     try {
+      const payload = role === 'student'
+        ? { usn, email, role, password }
+        : { name, email, role, password };
+
       const res = await fetch(`${API}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ usn, email, role, password }),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.text();
@@ -93,16 +98,38 @@ function Register() {
               </select>
             </div>
 
-            <div className="form-group">
-              <label>USN</label>
-              <input
-                type="text"
-                placeholder="Enter your USN"
-                value={usn}
-                onChange={(e) => setUsn(e.target.value)}
-                required
-              />
-            </div>
+            {role === 'student' ? (
+              <div className="form-group">
+                <label>USN</label>
+                <input
+                  type="text"
+                  placeholder="Enter your USN"
+                  value={usn}
+                  onChange={(e) => setUsn(e.target.value)}
+                  required
+                />
+              </div>
+            ) : role !== '' ? (
+              <div className="form-group">
+                <label>Name</label>
+                <input
+                  type="text"
+                  placeholder="Enter your Name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+            ) : (
+              <div className="form-group">
+                <label>USN / Name</label>
+                <input
+                  type="text"
+                  placeholder="Select a role first"
+                  disabled
+                />
+              </div>
+            )}
 
             <div className="form-group">
               <label>Email</label>

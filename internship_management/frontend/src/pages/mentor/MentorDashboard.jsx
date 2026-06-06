@@ -13,7 +13,7 @@ function MentorDashboard({ onLogout, user }) {
   useEffect(() => {
     const loadProfile = async () => {
       try {
-        const res = await fetch(`${API}/auth/user/${user.usn}`);
+        const res = await fetch(`${API}/auth/user/${user.name || user.usn}`);
         if (!res.ok) return;
         const data = await res.json();
         setProfile(data);
@@ -22,7 +22,7 @@ function MentorDashboard({ onLogout, user }) {
         console.error('Could not load profile', err);
       }
     };
-    if (user?.usn) loadProfile();
+    if (user?.name || user?.usn) loadProfile();
   }, [user]);
 
   const handleSaveProfile = async (e) => {
@@ -35,7 +35,7 @@ function MentorDashboard({ onLogout, user }) {
       phone: form.get('phone')
     };
     try {
-      const res = await fetch(`${API}/auth/user/${user.usn}`, {
+      const res = await fetch(`${API}/auth/user/${user.name || user.usn}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -56,7 +56,7 @@ function MentorDashboard({ onLogout, user }) {
       <div className="dashboard-container">
         <div className="dashboard-card">
           <h2>Mentor Dashboard</h2>
-          <p className="dashboard-subtitle">Welcome, {profile?.name || user?.usn}!</p>
+          <p className="dashboard-subtitle">Welcome, {profile?.name || user?.name || user?.usn}!</p>
           <div className="dashboard-buttons">
             <button className="dashboard-btn" onClick={() => navigate('/mentor/evaluation')}>
               <span className="btn-icon">📝</span> Evaluation Reports

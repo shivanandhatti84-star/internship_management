@@ -1,0 +1,37 @@
+.portal-layout-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bg-light);
+  overflow: hidden;
+}
+
+.portal-layout-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.portal-layout-content {
+  flex: 1;
+  padding: 35px 40px;
+  overflow-y: auto;
+  background-color: var(--bg-light);
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+  .portal-layout-wrapper {
+    overflow: auto;
+  }
+
+  .portal-layout-main {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  .portal-layout-content {
+    padding: 24px 16px;
+    overflow-y: visible;
+  }
+}

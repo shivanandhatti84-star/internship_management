@@ -106,11 +106,20 @@ const User = require("../models/user");
 // REGISTER
 router.post("/register", async (req, res) => {
   try {
-    const { usn, email, role, password } = req.body;
-    let user = await User.findOne({ usn, role });
-    if (user) return res.send("User already registered");
-    const newUser = new User({ usn, email, role, password });
-    await newUser.save();
+    const { usn, email, role, password, name } = req.body;
+    if (role === 'student') {
+      if (!usn) return res.status(400).send("USN is required for students");
+      let user = await User.findOne({ usn });
+      if (user) return res.send("User already registered");
+      const newUser = new User({ usn, email, role, password, name: name || '' });
+      await newUser.save();
+    } else {
+      if (!name) return res.status(400).send("Name is required");
+      let user = await User.findOne({ name, role });
+      if (user) return res.send("User already registered");
+      const newUser = new User({ name, email, role, password });
+      await newUser.save();
+    }
     res.send("Registered successfully");
   } catch (err) {
     console.error(err);
@@ -121,8 +130,13 @@ router.post("/register", async (req, res) => {
 // LOGIN
 router.post("/login", async (req, res) => {
   try {
-    const { usn, role, password } = req.body;
-    let user = await User.findOne({ usn, role });
+    const { usn, name, role, password } = req.body;
+    let user;
+    if (role === 'student') {
+      user = await User.findOne({ usn: usn || name, role });
+    } else {
+      user = await User.findOne({ name: name || usn, role });
+    }
     if (!user) return res.send("User not found");
     if (user.password !== password) return res.send("Wrong password");
     res.send("Login success");
@@ -142,10 +156,15 @@ router.get("/mentors", async (req, res) => {
   }
 });
 
-// GET user by USN (no password)
-router.get('/user/:usn', async (req, res) => {
+// GET user by USN or Name (no password)
+router.get('/user/:identifier', async (req, res) => {
   try {
-    const user = await User.findOne({ usn: req.params.usn }, { password: 0, _id: 0 });
+    const user = await User.findOne({
+      $or: [
+        { usn: req.params.identifier },
+        { name: req.params.identifier }
+      ]
+    }, { password: 0, _id: 0 });
     if (!user) return res.status(404).send('User not found');
     res.json(user);
   } catch (err) {
@@ -154,8 +173,8 @@ router.get('/user/:usn', async (req, res) => {
   }
 });
 
-// UPDATE user profile (by USN) — used by mentors to save profile
-router.put('/user/:usn', async (req, res) => {
+// UPDATE user profile (by USN or Name) — used by mentors to save profile
+router.put('/user/:identifier', async (req, res) => {
   try {
     const { name, department, phone, email } = req.body;
     const update = {};
@@ -164,7 +183,12 @@ router.put('/user/:usn', async (req, res) => {
     if (phone !== undefined) update.phone = phone;
     if (email !== undefined) update.email = email;
 
-    const user = await User.findOneAndUpdate({ usn: req.params.usn }, update, { new: true });
+    const user = await User.findOneAndUpdate({
+      $or: [
+        { usn: req.params.identifier },
+        { name: req.params.identifier }
+      ]
+    }, update, { new: true });
     if (!user) return res.status(404).send('User not found');
     res.send('Profile updated');
   } catch (err) {

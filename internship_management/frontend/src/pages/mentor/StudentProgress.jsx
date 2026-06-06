@@ -64,7 +64,7 @@ function StudentProgress({ user }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           usn,
-          mentorUsn: user?.usn,
+          mentorUsn: user?.name || user?.usn,
           evaluationNumber: phase,
           scheduledAt
         })
@@ -99,7 +99,7 @@ function StudentProgress({ user }) {
 
         a =>
           a.status === 'Accepted' &&
-          a.mentorUsn === user?.usn
+          a.mentorUsn === (user?.name || user?.usn)
 
       );
 
@@ -117,7 +117,7 @@ function StudentProgress({ user }) {
 
     }
 
-  }, [fetchEvaluations, user?.usn]);
+  }, [fetchEvaluations, user?.name, user?.usn]);
 
   useEffect(() => {
 
