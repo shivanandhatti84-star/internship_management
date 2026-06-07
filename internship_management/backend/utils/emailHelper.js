@@ -151,24 +151,28 @@ const sendMentorAssignmentEmails = async ({
   if (smtpTransporter) {
     try {
       const smtpSender = getSMTPSender();
-      const studentHtml = getStudentAssignmentHtml(studentName, studentUsn, mentorName, mentorUsn, mentorEmail, company, duration, { redirected: false });
-      const mentorHtml = getMentorAssignmentHtml(mentorName, studentName, studentUsn, studentEmail, company, duration, { redirected: false });
+      
+      if (studentEmail) {
+        const studentHtml = getStudentAssignmentHtml(studentName, studentUsn, mentorName || "Assigned Mentor", mentorUsn || "", mentorEmail || "", company, duration, { redirected: false });
+        await smtpTransporter.sendMail({
+          from: smtpSender,
+          to: studentEmail,
+          subject: `Mentor Assigned for your Internship at ${company}`,
+          html: studentHtml
+        });
+        console.log(`[SMTP] Assignment email sent to Student: ${studentEmail}`);
+      }
 
-      await smtpTransporter.sendMail({
-        from: smtpSender,
-        to: studentEmail,
-        subject: `Mentor Assigned for your Internship at ${company}`,
-        html: studentHtml
-      });
-      console.log(`[SMTP] Assignment email sent to Student: ${studentEmail}`);
-
-      await smtpTransporter.sendMail({
-        from: smtpSender,
-        to: mentorEmail,
-        subject: `New Student Assigned: ${studentName} (${studentUsn})`,
-        html: mentorHtml
-      });
-      console.log(`[SMTP] Assignment email sent to Mentor: ${mentorEmail}`);
+      if (mentorEmail) {
+        const mentorHtml = getMentorAssignmentHtml(mentorName, studentName, studentUsn, studentEmail || "", company, duration, { redirected: false });
+        await smtpTransporter.sendMail({
+          from: smtpSender,
+          to: mentorEmail,
+          subject: `New Student Assigned: ${studentName} (${studentUsn})`,
+          html: mentorHtml
+        });
+        console.log(`[SMTP] Assignment email sent to Mentor: ${mentorEmail}`);
+      }
       return;
     } catch (err) {
       console.error("[SMTP] Error sending assignment emails, falling back:", err);
@@ -176,42 +180,49 @@ const sendMentorAssignmentEmails = async ({
   }
 
   // Fallback to Resend Client
-  const studentDest = getRecipientEmail(studentEmail, fromEmail);
-  const mentorDest = getRecipientEmail(mentorEmail, fromEmail);
+  const studentDest = studentEmail ? getRecipientEmail(studentEmail, fromEmail) : null;
+  const mentorDest = mentorEmail ? getRecipientEmail(mentorEmail, fromEmail) : null;
 
   if (!resendClient) {
     console.log("=== SIMULATED MENTOR ASSIGNMENT EMAILS ===");
-    console.log(`To Student: [${studentDest.target}] ${studentDest.redirected ? `(Redirected from ${studentEmail})` : ''}`);
-    console.log(`Subject: Mentor Assigned - ${company} (Duration: ${duration})`);
-    console.log(`To Mentor: [${mentorDest.target}] ${mentorDest.redirected ? `(Redirected from ${mentorEmail})` : ''}`);
-    console.log(`Subject: New Student Assigned - ${company} (Duration: ${duration})`);
+    if (studentDest) {
+      console.log(`To Student: [${studentDest.target}] ${studentDest.redirected ? `(Redirected from ${studentEmail})` : ''}`);
+      console.log(`Subject: Mentor Assigned - ${company} (Duration: ${duration})`);
+    }
+    if (mentorDest) {
+      console.log(`To Mentor: [${mentorDest.target}] ${mentorDest.redirected ? `(Redirected from ${mentorEmail})` : ''}`);
+      console.log(`Subject: New Student Assigned - ${company} (Duration: ${duration})`);
+    }
     console.log("==========================================");
     return;
   }
 
   try {
-    const studentHtml = getStudentAssignmentHtml(studentName, studentUsn, mentorName, mentorUsn, mentorEmail, company, duration, { redirected: studentDest.redirected, originalEmail: studentEmail });
-    const mentorHtml = getMentorAssignmentHtml(mentorName, studentName, studentUsn, studentEmail, company, duration, { redirected: mentorDest.redirected, originalEmail: mentorEmail });
+    if (studentDest) {
+      const studentHtml = getStudentAssignmentHtml(studentName, studentUsn, mentorName || "Assigned Mentor", mentorUsn || "", mentorEmail || "", company, duration, { redirected: studentDest.redirected, originalEmail: studentEmail });
+      const studentRes = await resendClient.emails.send({
+        from: fromEmail,
+        to: studentDest.target,
+        subject: studentDest.redirected
+          ? `[Redirected] Mentor Assigned for your Internship at ${company} (To: ${studentEmail})`
+          : `Mentor Assigned for your Internship at ${company}`,
+        html: studentHtml
+      });
+      if (studentRes.error) console.error("Resend Student error details:", studentRes.error);
+    }
 
-    const studentRes = await resendClient.emails.send({
-      from: fromEmail,
-      to: studentDest.target,
-      subject: studentDest.redirected
-        ? `[Redirected] Mentor Assigned for your Internship at ${company} (To: ${studentEmail})`
-        : `Mentor Assigned for your Internship at ${company}`,
-      html: studentHtml
-    });
-    if (studentRes.error) console.error("Resend Student error details:", studentRes.error);
-
-    const mentorRes = await resendClient.emails.send({
-      from: fromEmail,
-      to: mentorDest.target,
-      subject: mentorDest.redirected
-        ? `[Redirected] New Student Assigned: ${studentName} (To: ${mentorEmail})`
-        : `New Student Assigned: ${studentName} (${studentUsn})`,
-      html: mentorHtml
-    });
-    if (mentorRes.error) console.error("Resend Mentor error details:", mentorRes.error);
+    if (mentorDest) {
+      const mentorHtml = getMentorAssignmentHtml(mentorName, studentName, studentUsn, studentEmail || "", company, duration, { redirected: mentorDest.redirected, originalEmail: mentorEmail });
+      const mentorRes = await resendClient.emails.send({
+        from: fromEmail,
+        to: mentorDest.target,
+        subject: mentorDest.redirected
+          ? `[Redirected] New Student Assigned: ${studentName} (To: ${mentorEmail})`
+          : `New Student Assigned: ${studentName} (${studentUsn})`,
+        html: mentorHtml
+      });
+      if (mentorRes.error) console.error("Resend Mentor error details:", mentorRes.error);
+    }
   } catch (error) {
     console.error("Error sending assignment emails via Resend HTTP API:", error);
     throw error;

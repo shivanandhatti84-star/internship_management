@@ -222,7 +222,30 @@ router.put("/:id/assign-mentor", async (req, res) => {
 
     // Look up Student and Mentor details for sending email (case-insensitive)
     try {
+      let studentEmail = null;
+      let studentName = app.usn;
+
       const student = await User.findOne({ usn: new RegExp(`^${app.usn}$`, "i") });
+      if (student) {
+        studentEmail = student.email;
+        studentName = student.name || student.usn;
+      } else {
+        // Try to find in profiles collection
+        const profile = await mongoose.connection.db.collection('profiles').findOne({ usn: new RegExp(`^${app.usn}$`, "i") });
+        if (profile) {
+          studentEmail = profile.email;
+          studentName = profile.name || app.usn;
+        } else {
+          // Guess student email based on KLETECH domain format as fallback
+          studentEmail = `${app.usn.toLowerCase()}@kletech.ac.in`;
+          studentName = app.usn;
+          console.log(`[Email Fallback] Guessed student email: ${studentEmail}`);
+        }
+      }
+
+      let mentorEmail = null;
+      let mentorName = mentorUsn;
+
       const mentor = await User.findOne({
         $or: [
           { usn: new RegExp(`^${mentorUsn}$`, "i") },
@@ -231,19 +254,24 @@ router.put("/:id/assign-mentor", async (req, res) => {
         role: "mentor"
       });
 
-      if (student && mentor) {
+      if (mentor) {
+        mentorEmail = mentor.email;
+        mentorName = mentor.name || mentorUsn;
+      } else {
+        console.warn(`Could not find mentor (${mentorUsn}) user account in database.`);
+      }
+
+      if (studentEmail || mentorEmail) {
         sendMentorAssignmentEmails({
-          studentEmail: student.email,
-          studentName: student.name || student.usn,
-          studentUsn: student.usn,
-          mentorEmail: mentor.email,
-          mentorName: mentor.name || mentor.usn,
-          mentorUsn: mentor.usn || mentor.name,
+          studentEmail,
+          studentName,
+          studentUsn: app.usn,
+          mentorEmail,
+          mentorName,
+          mentorUsn: mentor ? (mentor.usn || mentor.name) : mentorUsn,
           company: app.company || (app.internshipId && app.internshipId.company) || "Assigned Company",
           duration: (app.internshipId && app.internshipId.duration) || "Not Specified"
         }).catch(err => console.error("Error sending mentor assignment emails:", err));
-      } else {
-        console.warn(`Could not find student (${app.usn}) or mentor (${mentorUsn}) user account to send emails.`);
       }
     } catch (emailErr) {
       console.error("Failed to process emails for mentor assignment:", emailErr);
