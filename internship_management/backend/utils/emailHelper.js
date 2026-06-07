@@ -201,16 +201,6 @@ const sendMentorAssignmentEmails = async ({
       });
       if (studentRes.error) {
         console.error("Resend Student error details:", studentRes.error);
-        if (studentDest.target.toLowerCase() !== "shivanandhatti84@gmail.com") {
-          console.log("[Resend Fallback] Recipient unverified, attempting fallback delivery to shivanandhatti84@gmail.com");
-          const fallbackHtml = getStudentAssignmentHtml(studentName, studentUsn, mentorName || "Assigned Mentor", mentorUsn || "", mentorEmail || "", company, duration, { redirected: true, originalEmail: studentEmail });
-          await resendClient.emails.send({
-            from: fromEmail,
-            to: "shivanandhatti84@gmail.com",
-            subject: `[Redirected Fallback] Mentor Assigned for your Internship at ${company} (To: ${studentEmail})`,
-            html: fallbackHtml
-          });
-        }
       }
     }
 
@@ -224,16 +214,6 @@ const sendMentorAssignmentEmails = async ({
       });
       if (mentorRes.error) {
         console.error("Resend Mentor error details:", mentorRes.error);
-        if (mentorDest.target.toLowerCase() !== "shivanandhatti84@gmail.com") {
-          console.log("[Resend Fallback] Recipient unverified, attempting fallback delivery to shivanandhatti84@gmail.com");
-          const fallbackHtml = getMentorAssignmentHtml(mentorName, studentName, studentUsn, studentEmail || "", company, duration, { redirected: true, originalEmail: mentorEmail });
-          await resendClient.emails.send({
-            from: fromEmail,
-            to: "shivanandhatti84@gmail.com",
-            subject: `[Redirected Fallback] New Student Assigned: ${studentName} (To: ${mentorEmail})`,
-            html: fallbackHtml
-          });
-        }
       }
     }
   } catch (error) {
@@ -305,16 +285,6 @@ const sendEvaluationScheduledEmail = async ({
     });
     if (res.error) {
       console.error("Resend Evaluation error details:", res.error);
-      if (studentDest.target.toLowerCase() !== "shivanandhatti84@gmail.com") {
-        console.log("[Resend Fallback] Recipient unverified, attempting fallback delivery to shivanandhatti84@gmail.com");
-        const fallbackHtml = getEvaluationScheduledHtml(studentName, mentorName, evaluationNumber, formattedDate, { redirected: true, originalEmail: studentEmail });
-        await resendClient.emails.send({
-          from: fromEmail,
-          to: "shivanandhatti84@gmail.com",
-          subject: `[Redirected Fallback] Internship Evaluation Scheduled: Evaluation #${evaluationNumber} (To: ${studentEmail})`,
-          html: fallbackHtml
-        });
-      }
     }
   } catch (error) {
     console.error("Error sending evaluation scheduled email via Resend HTTP API:", error);
