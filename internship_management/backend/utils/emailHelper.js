@@ -27,7 +27,8 @@ const getSMTPTransporter = () => {
     host,
     port,
     secure: port === 465, // true for 465, false for 587
-    auth: { user, pass }
+    auth: { user, pass },
+    family: 4 // Force IPv4 to bypass ENETUNREACH IPv6 routing errors on Render
   });
 };
 
