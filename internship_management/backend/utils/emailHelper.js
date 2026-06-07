@@ -44,13 +44,6 @@ const getSMTPSender = () => {
 };
 
 const getRecipientEmail = (email, fromEmail) => {
-  const verifiedTestEmail = "shivanandhatti84@gmail.com";
-  const isSandbox = !fromEmail || fromEmail.includes("onboarding@resend.dev");
-
-  if (isSandbox && email && email.toLowerCase() !== verifiedTestEmail.toLowerCase()) {
-    console.log(`[Resend Sandbox Redirect] Redirecting email from ${email} to ${verifiedTestEmail}`);
-    return { target: verifiedTestEmail, redirected: true };
-  }
   return { target: email, redirected: false };
 };
 
