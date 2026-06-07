@@ -131,12 +131,16 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { usn, name, role, password } = req.body;
-    let user;
-    if (role === 'student') {
-      user = await User.findOne({ usn: usn || name, role });
-    } else {
-      user = await User.findOne({ name: name || usn, role });
-    }
+    const identifier = usn || name;
+    
+    const user = await User.findOne({
+      $or: [
+        { usn: identifier },
+        { name: identifier }
+      ],
+      role
+    });
+
     if (!user) return res.send("User not found");
     if (user.password !== password) return res.send("Wrong password");
     res.send("Login success");

@@ -81,7 +81,8 @@
 
 
 const express = require("express");
-const router = express.Router();
+const mongoose = require("mongoose");
+const router = require("express").Router();
 const Application = require("../models/application");
 const Internship = require("../models/Internship");
 const User = require("../models/user");
@@ -121,9 +122,47 @@ router.post("/apply", async (req, res) => {
 // GET ALL APPLICATIONS (coordinator / HOD)
 router.get("/", async (req, res) => {
   try {
-    const apps = await Application.find().populate("internshipId");
-    res.json(apps);
+    const apps = await Application.find().populate("internshipId").lean();
+    
+    // Map student name and email
+    const studentUsns = apps.map(app => app.usn);
+    const users = await User.find({ usn: { $in: studentUsns }, role: 'student' }).lean();
+    
+    const mongooseConnection = mongoose.connection;
+    const profiles = await mongooseConnection.db.collection('profiles').find({ usn: { $in: studentUsns } }).toArray();
+    
+    const studentMap = {};
+    
+    // Initialize with registered User details (fallback)
+    users.forEach(student => {
+      studentMap[student.usn] = {
+        name: student.name || '—',
+        email: student.email || '—'
+      };
+    });
+    
+    // Override/Enrich with actual Profile details if filled
+    profiles.forEach(profile => {
+      if (studentMap[profile.usn]) {
+        if (profile.name) studentMap[profile.usn].name = profile.name;
+        if (profile.email) studentMap[profile.usn].email = profile.email;
+      } else {
+        studentMap[profile.usn] = {
+          name: profile.name || '—',
+          email: profile.email || '—'
+        };
+      }
+    });
+    
+    const appsWithStudentDetails = apps.map(app => ({
+      ...app,
+      studentName: studentMap[app.usn]?.name || '—',
+      studentEmail: studentMap[app.usn]?.email || '—'
+    }));
+
+    res.json(appsWithStudentDetails);
   } catch (err) {
+    console.error(err);
     res.status(500).send("Server error");
   }
 });
