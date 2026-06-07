@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer");
 
 // Initialize Resend with the API key from environment variables
 const getResendClient = () => {
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = process.env.RESEND_API_KEY || "re_c1H3DJam_2Lqg5r6d8xPGg3wz7kygTHuq";
 
   if (!apiKey || apiKey.includes("your_api_key")) {
     return null;
