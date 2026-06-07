@@ -31,6 +31,17 @@ const getSMTPTransporter = () => {
   });
 };
 
+const getSMTPSender = () => {
+  const fromEmail = process.env.EMAIL_FROM;
+  const smtpUser = process.env.SMTP_USER;
+
+  if (fromEmail && fromEmail.includes("<")) {
+    const displayName = fromEmail.split("<")[0].trim();
+    return `${displayName} <${smtpUser}>`;
+  }
+  return `Internship Management System <${smtpUser}>`;
+};
+
 const getRecipientEmail = (email) => {
   const verifiedTestEmail = "shivanandhatti84@gmail.com";
   const fromEmail = process.env.EMAIL_FROM || "onboarding@resend.dev";
@@ -112,7 +123,7 @@ const sendMentorAssignmentEmails = async ({
   // Try SMTP first if credentials exist
   if (smtpTransporter) {
     try {
-      const smtpSender = `Internship Management System <${process.env.SMTP_USER}>`;
+      const smtpSender = getSMTPSender();
       await smtpTransporter.sendMail({
         from: smtpSender,
         to: studentDest.target,
@@ -222,8 +233,9 @@ const sendEvaluationScheduledEmail = async ({
   // Try SMTP first
   if (smtpTransporter) {
     try {
+      const smtpSender = getSMTPSender();
       await smtpTransporter.sendMail({
-        from: `Internship Management System <${process.env.SMTP_USER}>`,
+        from: smtpSender,
         to: studentDest.target,
         subject: `Internship Evaluation Scheduled: Evaluation #${evaluationNumber}`,
         html: htmlContent
