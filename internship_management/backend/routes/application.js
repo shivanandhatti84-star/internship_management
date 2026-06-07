@@ -211,7 +211,7 @@ router.put("/:id/assign-mentor", async (req, res) => {
     const { mentorUsn } = req.body;
     
     // Find the application to get the student's USN and company details
-    const app = await Application.findById(req.params.id);
+    const app = await Application.findById(req.params.id).populate("internshipId");
     if (!app) {
       return res.status(404).send("Application not found");
     }
@@ -239,7 +239,8 @@ router.put("/:id/assign-mentor", async (req, res) => {
           mentorEmail: mentor.email,
           mentorName: mentor.name || mentor.usn,
           mentorUsn: mentor.usn || mentor.name,
-          company: app.company || "Assigned Company"
+          company: app.company || (app.internshipId && app.internshipId.company) || "Assigned Company",
+          duration: (app.internshipId && app.internshipId.duration) || "Not Specified"
         }).catch(err => console.error("Error sending mentor assignment emails:", err));
       } else {
         console.warn(`Could not find student (${app.usn}) or mentor (${mentorUsn}) user account to send emails.`);
