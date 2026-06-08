@@ -63,40 +63,36 @@ function StudentProfiles({ user }) {
 
   // ================= LOAD PROFILE =================
 
-  const loadProfile = async (usn) => {
-
+  const loadProfile = async (usn, studentApp) => {
     try {
-
       console.log("Fetching profile for:", usn);
-
       const res = await fetch(`${API}/profile/${usn}`);
-
       const data = await res.json();
-
       console.log("Profile Response:", data);
 
+      let profileData = {};
       if (!data || data.message === "Profile not found") {
-
-        setSelectedProfile({
+        profileData = {
           usn: usn,
-          name: '',
-          email: '',
+          name: studentApp?.studentName || '',
+          email: studentApp?.studentEmail || '',
           phone: '',
           cgpa: '',
           branch: '',
-        });
-
-        return;
+        };
+      } else {
+        profileData = data;
       }
 
-      setSelectedProfile(data);
+      if (studentApp) {
+        profileData.applicationCompany = studentApp.company || (studentApp.internshipId && studentApp.internshipId.company);
+        profileData.internshipDetails = studentApp.internshipId || null;
+      }
 
+      setSelectedProfile(profileData);
     } catch (err) {
-
       console.error(err);
-
       alert("Could not load student profile");
-
     }
   };
 
@@ -160,11 +156,12 @@ function StudentProfiles({ user }) {
                   className="student-list-item"
                   onClick={() => {
                     console.log("Clicked Student:", student);
-                    loadProfile(student.usn);
+                    loadProfile(student.usn, student);
                   }}
                   style={{
                     cursor: 'pointer',
-                    border: '1px solid #ccc',
+                    border: selectedProfile?.usn === student.usn ? '2px solid #0f3a6a' : '1px solid #ccc',
+                    boxShadow: selectedProfile?.usn === student.usn ? '0 4px 12px rgba(15, 58, 106, 0.15)' : 'none',
                     padding: '15px',
                     marginBottom: '15px',
                     borderRadius: '12px',
@@ -172,7 +169,7 @@ function StudentProfiles({ user }) {
                     display: 'flex',
                     alignItems: 'center',
                     gap: '15px',
-                    transition: '0.3s'
+                    transition: 'all 0.3s ease'
                   }}
                 >
 
@@ -353,6 +350,53 @@ function StudentProfiles({ user }) {
                       <span className="value">
                         {selectedProfile?.branch || 'Not provided'}
                       </span>
+                    </div>
+
+                    {/* Company & Internship Details */}
+                    <div style={{ marginTop: '30px', borderTop: '2px solid #eaedf2', paddingTop: '20px' }}>
+                      <h3 style={{ color: '#0f3a6a', marginBottom: '20px', borderBottom: '2px solid #e2a32c', paddingBottom: '5px', display: 'inline-block', fontSize: '18px' }}>Company & Internship Details</h3>
+                      
+                      <div className="info-row">
+                        <span className="label">Company Name:</span>
+                        <span className="value">
+                          {selectedProfile?.applicationCompany || 'Not provided'}
+                        </span>
+                      </div>
+
+                      <div className="info-row">
+                        <span className="label">Location:</span>
+                        <span className="value">
+                          {selectedProfile?.internshipDetails?.location || 'Not provided'}
+                        </span>
+                      </div>
+
+                      <div className="info-row">
+                        <span className="label">Duration:</span>
+                        <span className="value">
+                          {selectedProfile?.internshipDetails?.duration || 'Not provided'}
+                        </span>
+                      </div>
+
+                      <div className="info-row">
+                        <span className="label">Start Date:</span>
+                        <span className="value">
+                          {selectedProfile?.internshipDetails?.startDate || 'Not provided'}
+                        </span>
+                      </div>
+
+                      <div className="info-row">
+                        <span className="label">Stipend:</span>
+                        <span className="value">
+                          {selectedProfile?.internshipDetails?.stipend ? `₹${selectedProfile.internshipDetails.stipend} / Month` : 'Not provided'}
+                        </span>
+                      </div>
+
+                      <div className="info-row" style={{ flexDirection: 'column', alignItems: 'flex-start', borderBottom: 'none' }}>
+                        <span className="label" style={{ marginBottom: '8px' }}>Project/Internship Description:</span>
+                        <span className="value" style={{ textAlign: 'left', color: '#555', fontStyle: 'italic', background: '#f9f9f9', padding: '10px', borderRadius: '6px', width: '100%', boxSizing: 'border-box' }}>
+                          {selectedProfile?.internshipDetails?.description || 'No description provided.'}
+                        </span>
+                      </div>
                     </div>
 
                   </div>
