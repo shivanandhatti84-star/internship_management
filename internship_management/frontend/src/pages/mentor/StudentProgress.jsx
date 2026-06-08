@@ -135,7 +135,7 @@ function StudentProgress({ user }) {
 
         <div className="page-header">
 
-          <h2>Student Progress</h2>
+          <h2>Evaluation Scheduling</h2>
 
           <button
             className="btn-back"

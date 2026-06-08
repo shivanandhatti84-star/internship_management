@@ -38,7 +38,7 @@ function Sidebar() {
     mentor: [
       { path: '/mentor/dashboard', label: 'Dashboard', icon: '🏠' },
       { path: '/mentor/evaluation', label: 'Evaluation Reports', icon: '📝' },
-      { path: '/mentor/progress', label: 'Student Progress', icon: '📈' },
+      { path: '/mentor/progress', label: 'Evaluation Scheduling', icon: '📅' },
       { path: '/mentor/student-profiles', label: 'Student Profiles', icon: '👥' }
     ],
     hod: [
